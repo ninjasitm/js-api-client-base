@@ -1,0 +1,49 @@
+{
+  "name": "js-api-client-base",
+  "version": "0.1.0",
+  "description": "Javascript API client base. Use this to develop services for react, vue or others using axios",
+  "main": "src/index.js",
+  "scripts": {
+    "lint": "jshint --exclude=src/*.min.js src/**/*.js test/*.js",
+    "test": "mocha --require @babel/register",
+    "build": "npm run build:version",
+    "build:version": "cross-env replace -s 'VERSION = \"[^\"]+\"' \"VERSION = \\\"$npm_package_version\\\"\" src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/nitm/js-api-client-base.git"
+  },
+  "author": "Malcolm Paul <malcolm@ninjasitm.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitlab.com/nitm/js-api-client-base/issues"
+  },
+  "homepage": "https://gitlab.com/nitm/js-api-client-base#readme",
+  "files": [
+    "/src",
+    "CHANGELOG",
+    "README"
+  ],
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/node": "^7.4.5",
+    "@babel/plugin-proposal-export-default-from": "^7.2.0",
+    "@babel/plugin-proposal-export-namespace-from": "^7.2.0",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/register": "^7.4.4",
+    "chai": "^4.2.0",
+    "cross-env": "^5.2.0",
+    "jshint": "^2.9.6",
+    "mocha": "^6.1.4",
+    "node-qunit-phantomjs": "^2.0.0",
+    "nodemon": "^1.19.1",
+    "replace": "^1.0.0",
+    "rimraf": "^2.6.2",
+    "uglify-js": "^3.4.9"
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "js-logger": "^1.6.0"
+  }
+}
