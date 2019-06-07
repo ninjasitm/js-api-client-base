@@ -19,7 +19,9 @@ const coreTypes = {
     STORE_CREATE_CACHE_REMOVE: `STORE_CREATE_CACHE_REMOVE`
 };
 
-function types(types) {
+const store = {};
+
+store.types = function types(types) {
     const extend = types instanceof Object ? types : {};
     let localTypes = {};
     Object.keys(coreTypes).map((value, key) => {
@@ -37,7 +39,7 @@ function types(types) {
  * @param {Object} state
  * @returns
  */
-function state(state, exclusive) {
+store.state = function state(state, exclusive) {
     const extend = state instanceof Object ? state : {};
     const baseState = exclusive === true ? {} : {
         config: {
@@ -66,7 +68,7 @@ function state(state, exclusive) {
  * @aram {Object} getters
  * @returns
  */
-function getters(getters, exclusive) {
+store.getters = function getters(getters, exclusive) {
     const extend = getters instanceof Object ? getters : {};
     const baseGetters = exclusive === true ? {} : {
         config: state => state.config,
@@ -93,7 +95,7 @@ function getters(getters, exclusive) {
  * @param {BaseApi} api
  * @returns
  */
-function actions(actions, _type, api) {
+store.actions = function actions(actions, _type, api) {
     let type = _type || 'unknown';
     type = type[0] + type.substr(1);
     const extend = actions instanceof Object ? actions : {};
@@ -355,7 +357,7 @@ function actions(actions, _type, api) {
  * @param {Object} state
  * @returns
  */
-function mutations(mutations, types, state) {
+store.mutations = function mutations(mutations, types, state) {
     const extend = mutations instanceof Object ? mutations : {};
     const _TYPES = this.types(types);
 
@@ -444,11 +446,6 @@ function mutations(mutations, types, state) {
     };
 }
 
-export default {
-    state,
-    getters,
-    actions,
-    mutations,
-    types,
-    utils
-};
+store.utils = utils;
+
+export default store;
