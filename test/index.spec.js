@@ -44,17 +44,17 @@ describe('Service', function () {
     describe('logger', function () {
         const service = new BaseApi();
         it('should be set to an object', function () {
-            assert.typeOf(service.$log, 'object');
+            assert.typeOf(service.log(), 'object');
         });
         ['warn', 'log', 'trace', 'info', 'debug', 'error'].map(method => {
             it(`${method} should be a function`, function () {
-                assert.typeOf(service.$log[method], 'function');
+                assert.typeOf(service.log()[method], 'function');
             });
         });
     });
     describe('api methods', function () {
         it('axios should be the default api', function () {
-            assert.typeOf(service.$api, 'function');
+            assert.typeOf(service.api(), 'function');
         });
         const service = new BaseApi();
         [
@@ -82,20 +82,21 @@ describe('Store', function () {
                 describe('logger', function () {
                     const store = new BaseStore.VuexStore;
                     it('should be set to an object', function () {
-                        assert.typeOf(store.$log, 'object');
+                        assert.typeOf(store.log(), 'object');
                     });
                     ['warn', 'log', 'trace', 'info', 'debug', 'error'].map(method => {
                         it(`${method} should be a function`, function () {
-                            assert.typeOf(store.$log[method], 'function');
+                            assert.typeOf(store.log()[method], 'function');
                         });
                     });
                     it('should be able to set the logger', function () {
                         store.setLogger(null);
-                        assert.typeOf(store.$log, 'null');
+                        assert.typeOf(store.log(),
+                            'null');
                     });
                     it('should be able to create the logger using the default logger', function () {
                         store.createLogger('WARN');
-                        assert.typeOf(store.$log, 'object');
+                        assert.typeOf(store.log(), 'object');
                     });
                 });
                 describe('state', function () {
@@ -158,7 +159,7 @@ describe('Store', function () {
                         const getters = store.getters(null, true);
                         assert.typeOf(getters, 'object');
                         assert.deepEqual(getters, {
-                            $log: getters.$log,
+                            log: getters.log,
                         });
                     });
                     it('should be possible to extend the getters', function () {
@@ -167,7 +168,7 @@ describe('Store', function () {
                         }, true);
                         assert.typeOf(getters, 'object');
                         assert.deepEqual(getters, {
-                            $log: getters.$log,
+                            log: getters.log,
                             extra: {}
                         });
                     });
@@ -183,7 +184,7 @@ describe('Store', function () {
                         assert.typeOf(actions, 'object');
                     });
                     it('should have a logger', function () {
-                        assert.typeOf(actions.$log, 'function');
+                        assert.typeOf(actions.log, 'function');
                     });
                     [
                         'getIndexConfig',
@@ -204,7 +205,7 @@ describe('Store', function () {
                             extra: {},
                         }, 'custom', {});
                         assert.typeOf(actions, 'object');
-                        assert.equal(actions.$type(), 'custom');
+                        assert.equal(actions.type(), 'custom');
                         assert.deepInclude(actions, {
                             extra: {}
                         });
@@ -221,7 +222,7 @@ describe('Store', function () {
                         assert.typeOf(mutations, 'object');
                     });
                     it('should have a logger', function () {
-                        assert.typeOf(mutations.$log, 'function');
+                        assert.typeOf(mutations.log, 'function');
                     });
                     Object.values(store.allTypes).map(method => {
                         it(`${method} should be a function`, function () {
