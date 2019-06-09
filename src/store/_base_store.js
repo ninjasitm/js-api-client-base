@@ -19,7 +19,7 @@ class BaseStore {
      * Get the app object
      * @returns {Object}
      */
-    $api() {
+    api() {
         return this.$api;
     }
 
@@ -27,7 +27,7 @@ class BaseStore {
      * Get the log object
      * @returns {Object}
      */
-    $log() {
+    log() {
         return this.$log;
     }
 

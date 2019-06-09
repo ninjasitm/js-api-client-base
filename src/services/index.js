@@ -54,7 +54,7 @@ class BaseApi {
      * Get the app object
      * @returns {Object}
      */
-    $api() {
+    api() {
         return this.$api;
     }
 
@@ -62,7 +62,7 @@ class BaseApi {
      * Get the log object
      * @returns {Object}
      */
-    $log() {
+    log() {
         return this.$log;
     }
 
