@@ -46,8 +46,18 @@ class BaseApi {
         this.proxy = this.createProxy();
         this.$log = null;
         this.$api = null;
+        this.$app = null;
         this.setLogger(props.logger, props.level);
         this.setApi(props.api);
+        this.setApp(props.app);
+    }
+
+    /**
+     * Get the app object
+     * @returns {Object}
+     */
+    app() {
+        return this.$app;
     }
 
     /**

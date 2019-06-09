@@ -19,6 +19,14 @@ class BaseStore {
      * Get the app object
      * @returns {Object}
      */
+    app() {
+        return this.$app;
+    }
+
+    /**
+     * Get the api object
+     * @returns {Object}
+     */
     api() {
         return this.$api;
     }

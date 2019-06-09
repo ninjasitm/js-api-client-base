@@ -96,7 +96,7 @@ class Store extends BaseStore {
             indexConfig: state => state.config.index,
             formConfig: state => state.config.form,
             data: state => state.data,
-            isAllLoaded: state => !!state.data.data.length,
+            isAllLoaded: state => state.data instanceof Object && state.data.data instanceof Array && state.data.data.length > 0,
             imported: state => state.imported
         };
         const $log = this.$log;
