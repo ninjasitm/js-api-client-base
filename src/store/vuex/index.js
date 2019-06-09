@@ -101,15 +101,14 @@ store.actions = function actions(actions, _type, api) {
     const extend = actions instanceof Object ? actions : {};
     return {
         ...{
-            $log: this.$log,
             type
         },
         ...{
             /**
              * Get the index page config for the given type
-             * @param {Object} context 
-             * @param {Object} params 
-             * @param {boolean} force  
+             * @param {Object} context
+             * @param {Object} params
+             * @param {boolean} force
              * @returns {Promise}
              */
             getIndexConfig(context, params, force) {
@@ -129,9 +128,9 @@ store.actions = function actions(actions, _type, api) {
             },
             /**
              * Get the form config needed for creating or updating models
-             * @param {Object} context 
-             * @param {object} params 
-             * @param {boolean} force  
+             * @param {Object} context
+             * @param {object} params
+             * @param {boolean} force
              * @returns {Promise}
              */
             getFormConfig(context, params, force) {
@@ -151,8 +150,8 @@ store.actions = function actions(actions, _type, api) {
             },
             /**
              * Get all of the items
-             * @param {Object} context 
-             * @param {Object} params  
+             * @param {Object} context
+             * @param {Object} params
              * @returns {Promise}
              */
             getAll(context, params) {
@@ -173,8 +172,8 @@ store.actions = function actions(actions, _type, api) {
             },
             /**
              * Set the data for the given type
-             * @param {Object} context 
-             * @param {any} data 
+             * @param {Object} context
+             * @param {any} data
              */
             setAll(context, data) {
                 this.$log.info(`[Store: ${type}]: Set data ${type}`, data)
@@ -190,8 +189,8 @@ store.actions = function actions(actions, _type, api) {
             },
             /**
              * Get the specific object with the given id
-             * @param {Object} context 
-             * @param {number|string} id  
+             * @param {Object} context
+             * @param {number|string} id
              * @returns {Promise}
              */
             getOne(context, id) {
@@ -215,8 +214,8 @@ store.actions = function actions(actions, _type, api) {
             },
             /**
              * Set the given object in the local store
-             * @param {Object} context 
-             * @param {any} data  
+             * @param {Object} context
+             * @param {any} data
              * @returns {Promise}
              */
             setOne(context, data) {
@@ -233,8 +232,8 @@ store.actions = function actions(actions, _type, api) {
             },
             /**
              * Get the specific object with the given id in the lcoal cache
-             * @param {Object} context 
-             * @param {number|string} id  
+             * @param {Object} context
+             * @param {number|string} id
              * @returns {Promise}
              */
             getOneCached(context, id) {
@@ -250,8 +249,8 @@ store.actions = function actions(actions, _type, api) {
             },
             /**
              * Save the given data to the store
-             * @param {Object} context 
-             * @param {Object} params 
+             * @param {Object} context
+             * @param {Object} params
              * @returns {Promise}
              */
             save(context, params) {
@@ -275,8 +274,8 @@ store.actions = function actions(actions, _type, api) {
             },
             /**
              * Import the given data into the store
-             * @param {Object} context 
-             * @param {Object} params 
+             * @param {Object} context
+             * @param {Object} params
              * @returns {Promise}
              */
             import(context, params) {
@@ -295,8 +294,8 @@ store.actions = function actions(actions, _type, api) {
             },
             /**
              * Delete the given data from the store
-             * @param {Object} context 
-             * @param {any} params 
+             * @param {Object} context
+             * @param {any} params
              * @returns {Promise}
              */
             delete(context, params) {
@@ -322,8 +321,8 @@ store.actions = function actions(actions, _type, api) {
             },
             /**
              * Toggle the given data from the store
-             * @param {Object} context 
-             * @param {any} params 
+             * @param {Object} context
+             * @param {any} params
              * @returns {Promise}
              */
             toggle(context, params, attr) {
@@ -363,7 +362,6 @@ store.mutations = function mutations(mutations, types, state) {
 
     return {
         ...{
-            $log: this.$log,
             _TYPES
         },
         ...{
