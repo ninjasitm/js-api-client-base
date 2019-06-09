@@ -5,6 +5,7 @@ class BaseStore {
         const props = _props instanceof Object ? _props : {};
         // Instantiate the logger
         this.$log = defaultLogger.create();
+        this.allTypes = {};
         this.setApp(props.app);
         this.setApi(props.api);
     }

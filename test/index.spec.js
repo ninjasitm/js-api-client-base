@@ -77,10 +77,10 @@ describe('Service', function () {
 describe('Store', function () {
     describe('modules', function () {
         it('should contain a vuex store', function () {
-            assert.typeOf(BaseStore.vuexStore, 'object');
+            assert.typeOf(BaseStore.VuexStore, 'function');
             describe('vuex store', function () {
                 describe('logger', function () {
-                    const store = BaseStore.vuexStore;
+                    const store = new BaseStore.VuexStore;
                     it('should be set to an object', function () {
                         assert.typeOf(store.$log, 'object');
                     });
@@ -99,7 +99,7 @@ describe('Store', function () {
                     });
                 });
                 describe('state', function () {
-                    const store = BaseStore.vuexStore;
+                    const store = new BaseStore.VuexStore;
                     const state = store.state();
                     it('should be set to a default object', function () {
                         assert.typeOf(state, 'object');
@@ -135,14 +135,11 @@ describe('Store', function () {
                     });
                 });
                 describe('getters', function () {
-                    const store = BaseStore.vuexStore;
+                    const store = new BaseStore.VuexStore;
                     const getters = store.getters();
                     const state = store.state();
                     it('should be set to a default object', function () {
                         assert.typeOf(getters, 'object');
-                    });
-                    it('should have a logger', function () {
-                        assert.typeOf(getters.$log, 'object');
                     });
                     const properties = {
                         config: 'object',
@@ -176,7 +173,7 @@ describe('Store', function () {
                     });
                 });
                 describe('actions', function () {
-                    const store = BaseStore.vuexStore;
+                    const store = new BaseStore.VuexStore;
                     const actions = store.actions();
                     const state = store.state();
                     it('should be set to a default object', function () {
@@ -186,7 +183,7 @@ describe('Store', function () {
                         assert.typeOf(actions, 'object');
                     });
                     it('should have a logger', function () {
-                        assert.typeOf(actions.$log, 'object');
+                        assert.typeOf(actions.$log, 'function');
                     });
                     [
                         'getIndexConfig',
@@ -207,14 +204,14 @@ describe('Store', function () {
                             extra: {},
                         }, 'custom', {});
                         assert.typeOf(actions, 'object');
-                        assert.equal(actions.type, 'custom');
+                        assert.equal(actions.type(), 'custom');
                         assert.deepInclude(actions, {
                             extra: {}
                         });
                     });
                 });
                 describe('mutations', function () {
-                    const store = BaseStore.vuexStore;
+                    const store = new BaseStore.VuexStore;
                     const mutations = store.mutations();
                     const state = store.state();
                     it('should be set to a default object', function () {
@@ -224,9 +221,9 @@ describe('Store', function () {
                         assert.typeOf(mutations, 'object');
                     });
                     it('should have a logger', function () {
-                        assert.typeOf(mutations.$log, 'object');
+                        assert.typeOf(mutations.$log, 'function');
                     });
-                    Object.values(mutations._TYPES).map(method => {
+                    Object.values(store.allTypes).map(method => {
                         it(`${method} should be a function`, function () {
                             assert.typeOf(mutations[method], 'function');
                         });
@@ -243,38 +240,38 @@ describe('Store', function () {
                         assert.typeOf(mutations.CUSTOM_MUTATION1, 'function');
                     });
                     const commitable = {
-                        [mutations._TYPES.STORE_GET_FORM_CONFIG]: {},
-                        [mutations._TYPES.STORE_GET_INDEX_CONFIG]: {},
-                        [mutations._TYPES.STORE_GET]: {
+                        [store.allTypes.STORE_GET_FORM_CONFIG]: {},
+                        [store.allTypes.STORE_GET_INDEX_CONFIG]: {},
+                        [store.allTypes.STORE_GET]: {
                             result: {}
                         },
-                        [mutations._TYPES.STORE_SET]: {
+                        [store.allTypes.STORE_SET]: {
                             result: {}
                         },
-                        [mutations._TYPES.STORE_SAVE]: {
+                        [store.allTypes.STORE_SAVE]: {
                             result: {}
                         },
-                        [mutations._TYPES.STORE_IMPORT]: {
+                        [store.allTypes.STORE_IMPORT]: {
                             data: []
                         },
-                        [mutations._TYPES.STORE_CREATE]: {
+                        [store.allTypes.STORE_CREATE]: {
                             result: {}
                         },
-                        [mutations._TYPES.STORE_UPDATE]: {
+                        [store.allTypes.STORE_UPDATE]: {
                             result: {}
                         },
-                        [mutations._TYPES.STORE_GET_ALL]: {
+                        [store.allTypes.STORE_GET_ALL]: {
                             result: {
                                 data: []
                             }
                         },
-                        [mutations._TYPES.STORE_DELETE]: {
+                        [store.allTypes.STORE_DELETE]: {
                             params: {}
                         },
-                        [mutations._TYPES.STORE_SET_ALL]: [],
-                        [mutations._TYPES.STORE_CREATE_CACHE_GET]: {},
-                        [mutations._TYPES.STORE_CREATE_CACHE_UPDATE]: {},
-                        [mutations._TYPES.STORE_CREATE_CACHE_REMOVE]: {},
+                        [store.allTypes.STORE_SET_ALL]: [],
+                        [store.allTypes.STORE_CREATE_CACHE_GET]: {},
+                        [store.allTypes.STORE_CREATE_CACHE_UPDATE]: {},
+                        [store.allTypes.STORE_CREATE_CACHE_REMOVE]: {},
                     };
                     Object.keys(commitable).map(mutation => {
                         it(`should be possible to commit mutation ${mutation}`, function () {
