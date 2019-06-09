@@ -2,12 +2,17 @@ import defaultLogger from '../logger';
 
 class BaseStore {
     constructor(_props) {
-        const props = _props instanceof Object ? _props : {};
+        this.init(_props);
         // Instantiate the logger
-        this.$log = defaultLogger.create();
+        this.$log = this.$log || defaultLogger.create();
+    }
+
+    init(_props) {
+        const props = _props instanceof Object ? _props : {};
         this.allTypes = {};
         this.setApp(props.app);
         this.setApi(props.api);
+        this.setLogger(props.logger);
     }
 
     /**
@@ -31,7 +36,7 @@ class BaseStore {
     }
 
     /**
-     * @param {Object} logger {
+     * @param {Object} logger with the following signature {
      *  log: function,
      *  info: function
      *  warn: function,

@@ -4,7 +4,6 @@ import BaseStore from '../_base_store';
 // Store types
 
 class Store extends BaseStore {
-
     constructor(_props) {
         const props = _props instanceof Object ? _props : {};
         super(props);
@@ -26,6 +25,18 @@ class Store extends BaseStore {
             STORE_CREATE_CACHE_UPDATE: `STORE_CREATE_CACHE_UPDATE`,
             STORE_CREATE_CACHE_REMOVE: `STORE_CREATE_CACHE_REMOVE`
         };
+    }
+
+    /**
+     * Generate the modules dynamically
+     * @param {Object} modules
+     */
+    generateModules(modules) {
+        const allModules = {};
+        Object.keys(modules).map(module => {
+            allModules[module] = modules[module](this);
+        });
+        return allModules;
     }
 
     types(types) {
