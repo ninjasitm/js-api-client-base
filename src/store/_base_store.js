@@ -16,6 +16,22 @@ class BaseStore {
     }
 
     /**
+     * Get the app object
+     * @returns {Object}
+     */
+    $api() {
+        return this.$api;
+    }
+
+    /**
+     * Get the log object
+     * @returns {Object}
+     */
+    $log() {
+        return this.$log;
+    }
+
+    /**
      * Set the api
      * @param {Object} api
      */
