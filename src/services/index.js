@@ -57,7 +57,7 @@ class BaseApi {
     /**
      * Set the API to use
      * By default will use axios
-     * @param {Object} api 
+     * @param {Object} api
      */
     setApi(api, headers) {
         this.$api = api || initDefaultApi({
@@ -67,9 +67,19 @@ class BaseApi {
     }
 
     /**
+     * Set the app
+     * @param {Object} app
+     */
+    setApp(app) {
+        if (app instanceof Object) {
+            this.$app = app;
+        }
+    }
+
+    /**
      * Set the logger to use
      * By default will use js-logger
-     * @param {Object} logger 
+     * @param {Object} logger
      */
     setLogger(logger, level) {
         this.$log = logger || defaultLogger.create(level);
@@ -77,9 +87,9 @@ class BaseApi {
 
     /**
      * get the base path
-     * @param {string} action 
-     * @param {Object} app 
-     * @param {Object} params 
+     * @param {string} action
+     * @param {Object} app
+     * @param {Object} params
      */
     getBasePath(action, app, params) {
         return this.basePath;
