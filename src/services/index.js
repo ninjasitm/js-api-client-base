@@ -50,8 +50,12 @@ class BaseApi {
         this.setApi(props.api);
     }
 
-    api() {
+    $api() {
         return this.$api;
+    }
+
+    $log() {
+        return this.$log;
     }
 
     /**

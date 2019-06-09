@@ -204,7 +204,7 @@ describe('Store', function () {
                             extra: {},
                         }, 'custom', {});
                         assert.typeOf(actions, 'object');
-                        assert.equal(actions.type(), 'custom');
+                        assert.equal(actions.$type(), 'custom');
                         assert.deepInclude(actions, {
                             extra: {}
                         });

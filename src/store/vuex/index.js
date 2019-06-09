@@ -360,7 +360,7 @@ class Store extends BaseStore {
         const $log = this.$log;
         return {
             ...{
-                type() {
+                $type() {
                     return type;
                 },
                 $log() {
