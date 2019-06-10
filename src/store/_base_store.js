@@ -45,6 +45,21 @@ class BaseStore {
      */
     setApi(api) {
         if (api instanceof Object) {
+            try {
+                api.setApp(this.$app);
+                api.setApi(this.$app.$http);
+            } catch (error) {
+                this.log().error("Missing setApp method", this.$api);
+                api.$app = this.$app;
+                const $app = this.$app;
+                api.app = function () {
+                    return $app;
+                }
+                const $log = this.$log;
+                api.log = function () {
+                    return $log;
+                }
+            }
             this.$api = api;
         }
     }

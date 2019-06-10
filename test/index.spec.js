@@ -20,7 +20,7 @@ describe('Service', function () {
             assert.equal(service.basePath, basePath);
         });
         it(`should return proper index url`, function () {
-            const url = service.getUrl('save');
+            const url = service.getUrl('save', 'save');
             assert.equal(basePath + '/save', url);
         });
         it(`should properly map urls`, function () {

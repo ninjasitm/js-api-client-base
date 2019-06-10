@@ -47,6 +47,7 @@ class BaseApi {
         this.$log = null;
         this.$api = null;
         this.$app = null;
+        this.utils = utils;
         this.setLogger(props.logger, props.level);
         this.setApi(props.api);
         this.setApp(props.app);
@@ -198,7 +199,7 @@ class BaseApi {
                 paths.push(this.path.default, endPoint);
             }
         } else {
-            paths.push(this.path, endPoint || index);
+            paths.push(this.path, endPoint);
         }
         return paths
             .filter(value => !!value)
@@ -216,7 +217,7 @@ class BaseApi {
         const id = params instanceof Object ?
             params.id :
             params;
-        this.$log.info(`[Services: ${this.type}]: GetIndexConfig`);
+        this.log().info(`[Services: ${this.type}]: GetIndexConfig`);
         const {
             getter,
             endPoint
@@ -225,8 +226,8 @@ class BaseApi {
             .api()
             .get(`${this.getUrl(getter || 'getIndexConfig', endPoint || 'index-config', params)}${id ? '/' + i : ''}`)
             .catch((error) => {
-                this.$log.error(`[Services: ${this.type}: GetIndexConfig]:`, error);
-                throw utils.resolveError(error);
+                this.log().error(`[Services: ${this.type}: GetIndexConfig]:`, error);
+                throw this.utils.resolveError(error);
             });
     }
 
@@ -241,7 +242,7 @@ class BaseApi {
         const id = params instanceof Object ?
             params.id :
             params;
-        this.$log.info(`[Services: ${this.type}]: GetFormConfig`);
+        this.log().info(`[Services: ${this.type}]: GetFormConfig`);
         const {
             getter,
             endPoint
@@ -251,8 +252,8 @@ class BaseApi {
             .api()
             .get(`${this.getUrl(getter || 'getFormConfig', endPoint || 'form-config', params)}${idPart}`)
             .catch((error) => {
-                this.$log.error(`[Services: ${this.type}: GetFormConfig]:`, error);
-                throw utils.resolveError(error);
+                this.log().error(`[Services: ${this.type}: GetFormConfig]:`, error);
+                throw this.utils.resolveError(error);
             });
     }
 
@@ -265,7 +266,7 @@ class BaseApi {
      * @memberof BaseApi
      */
     getAll(params, options) {
-        this.$log.info(`[Services: ${this.type}]: Get All ${this.type}`, params);
+        this.log().info(`[Services: ${this.type}]: Get All ${this.type}`, params);
         const {
             getter,
             endPoint
@@ -276,8 +277,8 @@ class BaseApi {
                 params: params
             })
             .catch((error) => {
-                this.$log.error(`[Services: ${this.type}: Get All ${this.type}]:`, error);
-                throw utils.resolveError(error);
+                this.log().error(`[Services: ${this.type}: Get All ${this.type}]:`, error);
+                throw this.utils.resolveError(error);
             });
     }
 
@@ -293,7 +294,7 @@ class BaseApi {
         const id = params instanceof Object ?
             params.id :
             params;
-        this.$log.info(`[Services: ${this.type}]: Get ${this.type}`, id);
+        this.log().info(`[Services: ${this.type}]: Get ${this.type}`, id);
         const {
             getter,
             endPoint
@@ -304,8 +305,8 @@ class BaseApi {
                 params
             })
             .catch((error) => {
-                this.$log.error(`[Services: ${this.type}: Get ${this.type}]: Error`, error);
-                throw utils.resolveError(error);
+                this.log().error(`[Services: ${this.type}: Get ${this.type}]: Error`, error);
+                throw this.utils.resolveError(error);
             });
     }
 
@@ -319,8 +320,8 @@ class BaseApi {
      */
     save(params, options) {
         const id = params.id;
-        const data = utils.createFormData(params);
-        this.$log.info(`[Services: ${this.type}]: Save ${this.type}`, params, data, id);
+        const data = this.utils.createFormData(params);
+        this.log().info(`[Services: ${this.type}]: Save ${this.type}`, params, data, id);
         const method = id ?
             `post` :
             `post`;
@@ -330,8 +331,8 @@ class BaseApi {
         } = options || {};
         const idPart = id ? '/' + id : '';
         return this.api()[method](`${this.getUrl(getter || 'save', endPoint || null, data)}${idPart}`, data).catch((error) => {
-            this.$log.error(`[Services: ${this.type}: Save ${this.type}]: Error`, error.response);
-            throw utils.resolveError(error);
+            this.log().error(`[Services: ${this.type}: Save ${this.type}]: Error`, error.response);
+            throw this.utils.resolveError(error);
         });
     }
 
@@ -344,8 +345,8 @@ class BaseApi {
      * @memberof BaseApi
      */
     import(params, options) {
-        const data = utils.createFormData(params);
-        this.$log.info(`[Services: ${this.type}]: Import ${this.type}`, data);
+        const data = this.utils.createFormData(params);
+        this.log().info(`[Services: ${this.type}]: Import ${this.type}`, data);
         const {
             getter,
             endPoint
@@ -354,8 +355,8 @@ class BaseApi {
             .api()
             .post(this.getUrl(getter || 'import', endPoint || 'import', data), data)
             .catch((error) => {
-                this.$log.error(`[Services: ${this.type}: Import]: Error`, error);
-                throw utils.resolveError(error);
+                this.log().error(`[Services: ${this.type}: Import]: Error`, error);
+                throw this.utils.resolveError(error);
             });
     }
 
@@ -369,7 +370,7 @@ class BaseApi {
      */
     delete(params, options) {
         const id = params.id || params;
-        this.$log.info(`[Services: ${this.type}]: Delete ${this.type}`, id);
+        this.log().info(`[Services: ${this.type}]: Delete ${this.type}`, id);
         const {
             getter,
             endPoint
@@ -378,8 +379,8 @@ class BaseApi {
             .api()
             .delete(this.getUrl(getter || 'delete', endPoint || null, params) + '/' + id)
             .catch((error) => {
-                this.$log.error(`[Services: ${this.type}: Delete ${this.type}]: Error`, error);
-                throw utils.resolveError(error);
+                this.log().error(`[Services: ${this.type}: Delete ${this.type}]: Error`, error);
+                throw this.utils.resolveError(error);
             });
     }
 
@@ -393,7 +394,7 @@ class BaseApi {
      */
     toggle(params, options) {
         const id = params.id || params;
-        this.$log.info(`[Services: ${this.type}]: Toggle ${this.type}`, id);
+        this.log().info(`[Services: ${this.type}]: Toggle ${this.type}`, id);
         const {
             getter,
             endPoint
@@ -402,8 +403,8 @@ class BaseApi {
             .api()
             .put(this.getUrl(getter || 'toggle', endPoint || 'toggle', params) + '/' + id)
             .catch((error) => {
-                this.$log.error(`[Services: ${this.type}: Toggle ${this.type}]: Error`, error);
-                throw utils.resolveError(error);
+                this.log().error(`[Services: ${this.type}: Toggle ${this.type}]: Error`, error);
+                throw this.utils.resolveError(error);
             });
     }
 }
