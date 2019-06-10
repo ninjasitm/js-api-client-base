@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "lint": "jshint --exclude=src/*.min.js src/**/*.js test/*.js",
-    "test": "mocha --require @babel/register",
+    "test": "mocha --require @babel/register --exit",
     "build": "npm run build:version",
     "build:version": "cross-env replace -s 'VERSION = \"[^\"]+\"' \"VERSION = \\\"$npm_package_version\\\"\" src/index.js"
   },
