@@ -226,7 +226,7 @@ class BaseApi {
             .api()
             .get(`${this.getUrl(getter || 'getIndexConfig', endPoint || 'index-config', params)}${id ? '/' + i : ''}`)
             .catch((error) => {
-                this.log().error(`[Services: ${this.type}: GetIndexConfig]:`, error);
+                this.log().warn(`[Services: ${this.type}: GetIndexConfig]:`, error);
                 throw this.utils.resolveError(error);
             });
     }
@@ -252,7 +252,7 @@ class BaseApi {
             .api()
             .get(`${this.getUrl(getter || 'getFormConfig', endPoint || 'form-config', params)}${idPart}`)
             .catch((error) => {
-                this.log().error(`[Services: ${this.type}: GetFormConfig]:`, error);
+                this.log().warn(`[Services: ${this.type}: GetFormConfig]:`, error);
                 throw this.utils.resolveError(error);
             });
     }
@@ -277,7 +277,7 @@ class BaseApi {
                 params: params
             })
             .catch((error) => {
-                this.log().error(`[Services: ${this.type}: Get All ${this.type}]:`, error);
+                this.log().warn(`[Services: ${this.type}: Get All ${this.type}]:`, error);
                 throw this.utils.resolveError(error);
             });
     }
@@ -305,7 +305,7 @@ class BaseApi {
                 params
             })
             .catch((error) => {
-                this.log().error(`[Services: ${this.type}: Get ${this.type}]: Error`, error);
+                this.log().warn(`[Services: ${this.type}: Get ${this.type}]: Error`, error);
                 throw this.utils.resolveError(error);
             });
     }
@@ -331,7 +331,7 @@ class BaseApi {
         } = options || {};
         const idPart = id ? '/' + id : '';
         return this.api()[method](`${this.getUrl(getter || 'save', endPoint || null, data)}${idPart}`, data).catch((error) => {
-            this.log().error(`[Services: ${this.type}: Save ${this.type}]: Error`, error.response);
+            this.log().warn(`[Services: ${this.type}: Save ${this.type}]: Error`, error.response);
             throw this.utils.resolveError(error);
         });
     }
@@ -355,7 +355,7 @@ class BaseApi {
             .api()
             .post(this.getUrl(getter || 'import', endPoint || 'import', data), data)
             .catch((error) => {
-                this.log().error(`[Services: ${this.type}: Import]: Error`, error);
+                this.log().warn(`[Services: ${this.type}: Import]: Error`, error);
                 throw this.utils.resolveError(error);
             });
     }
@@ -379,7 +379,7 @@ class BaseApi {
             .api()
             .delete(this.getUrl(getter || 'delete', endPoint || null, params) + '/' + id)
             .catch((error) => {
-                this.log().error(`[Services: ${this.type}: Delete ${this.type}]: Error`, error);
+                this.log().warn(`[Services: ${this.type}: Delete ${this.type}]: Error`, error);
                 throw this.utils.resolveError(error);
             });
     }
@@ -403,7 +403,7 @@ class BaseApi {
             .api()
             .put(this.getUrl(getter || 'toggle', endPoint || 'toggle', params) + '/' + id)
             .catch((error) => {
-                this.log().error(`[Services: ${this.type}: Toggle ${this.type}]: Error`, error);
+                this.log().warn(`[Services: ${this.type}: Toggle ${this.type}]: Error`, error);
                 throw this.utils.resolveError(error);
             });
     }

@@ -49,7 +49,7 @@ class BaseStore {
                 api.setApp(this.$app);
                 api.setApi(this.$app.$http);
             } catch (error) {
-                this.log().error("Missing setApp method", this.$api);
+                this.log().warn("Missing setApp method", this.$api);
                 api.$app = this.$app;
                 const $app = this.$app;
                 api.app = function () {
