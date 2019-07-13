@@ -427,9 +427,6 @@ class Store extends BaseStore {
                 },
                 [_TYPES.STORE_SAVE](state, data) {
                     // Only update if this is a new item
-                    if (data.context) {
-                        utils.updateStats(data.context, data.params.id ? 0 : 1, data.type);
-                    }
                     utils.addToStateData(state, data.result);
                     return data;
                 },
@@ -447,11 +444,6 @@ class Store extends BaseStore {
                     utils.updateStateData(state, data.result);
                     return data;
                 },
-                [_TYPES.STORE_UPDATE_STATS](state, data) {
-                    if (data.context) {
-                        utils.updateStats(state, data.value, data.type);
-                    }
-                },
                 [_TYPES.STORE_GET_ALL](state, data) {
                     state.data = data.result;
                     state.all = state.all.concat(data.result.data);
@@ -464,9 +456,6 @@ class Store extends BaseStore {
                 },
                 [_TYPES.STORE_DELETE](state, data) {
                     utils.removeFromStateData(state, data.params);
-                    if (data.context) {
-                        utils.updateStats(data.context, -1, data.type);
-                    }
                 },
                 [_TYPES.STORE_CREATE_CACHE_GET](state, options) {
                     return state.cachedCreateStore;

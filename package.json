@@ -1,11 +1,11 @@
 {
   "name": "@nitm/js-api-client-base",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Javascript API client base. Use this to develop services for react, vue or others using axios",
   "main": "src/index.js",
   "scripts": {
     "lint": "jshint --exclude=src/*.min.js src/**/*.js test/*.js",
-    "test": "mocha --require @babel/register",
+    "test": "mocha --require @babel/register --exit",
     "build": "npm run build:version",
     "build:version": "cross-env replace -s 'VERSION = \"[^\"]+\"' \"VERSION = \\\"$npm_package_version\\\"\" src/index.js"
   },
