@@ -186,7 +186,6 @@ class Store extends BaseStore {
                  * @returns {Promise}
                  */
                 getAll(context, params) {
-                    console.log("Actions", this);
                     log.info(`[Store: ${type}]: Get ${type}`, params);
                     return new Promise((resolve, reject) => {
                         return api.getAll(params).then((response) => {
