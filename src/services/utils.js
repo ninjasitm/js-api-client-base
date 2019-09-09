@@ -51,7 +51,7 @@ export default {
         if (object) {
           if (object instanceof Array) {
             if (!object.length && parent) {
-              result[parent] = object;
+              result[`${parent}[]`] = JSON.stringify();
             } else {
               object.forEach((v, k) => {
                 let fullKey = k;
