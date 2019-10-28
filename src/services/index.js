@@ -183,7 +183,8 @@ class BaseApi {
      * @returns
      * @memberof BaseApi
      */
-    getUrl(index, _endPoint, params, basePath, app) {
+    getUrl(index, _endPoint, _params, basePath, app) {
+        const params = (_params || {}).data || (_params || {});
         let paths = basePath ? [basePath] : [this.getBasePath(index, app, params)];
         const endPoint = _endPoint || null;
         if (this.path instanceof Object) {
@@ -353,7 +354,7 @@ class BaseApi {
         } = options || {};
         return this
             .api()
-            .post(this.getUrl(getter || 'import', endPoint || 'import', data), data)
+            .post(this.getUrl(getter || 'import', endPoint || 'import', params), data)
             .catch((error) => {
                 this.log().warn(`[Services: ${this.type}: Import]: Error`, error);
                 throw this.utils.resolveError(error);
