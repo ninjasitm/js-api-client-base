@@ -330,7 +330,7 @@ class BaseApi {
             endPoint
         } = options || {};
         const idPart = id ? '/' + id : '';
-        return this.api()[method](`${this.getUrl(getter || 'save', endPoint || null, data)}${idPart}`, data).catch((error) => {
+        return this.api()[method](`${this.getUrl(getter || 'save', endPoint || null, params.data || params)}${idPart}`, data).catch((error) => {
             this.log().warn(`[Services: ${this.type}: Save ${this.type}]: Error`, error.response);
             throw this.utils.resolveError(error);
         });
