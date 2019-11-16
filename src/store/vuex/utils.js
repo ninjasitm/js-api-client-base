@@ -44,21 +44,30 @@ export default {
 			const items =
 				originalItem instanceof Array ? originalItem : [originalItem];
 			const updateData = function(_state, _item) {
-				let data;
+				const filteredState = _state.filter(c => c instanceof Object);
+				const index = filteredState.findIndex(
+					current => current instanceof Object && current.id === _item.id
+				);
 				if (_state instanceof Array) {
-					data = _state.find(
+					const filteredState = _state.filter(c => c instanceof Object);
+					const index = filteredState.findIndex(
 						current => current instanceof Object && current.id === _item.id
 					);
-				} else {
-					data = _state;
-				}
-				if (data) {
-					data = {
-						...data,
-						..._item
-					};
-				} else if (addToState) {
-					this.addToStateData(state, _item, stateIsTarget);
+					if (index > -1) {
+						const existing = filteredState.find(
+							current => current instanceof Object && current.id === _item.id
+						);
+						if (existing instanceof Object) {
+							_state.splice(index, 1, {
+								...existing,
+								..._item
+							});
+						} else {
+							_state.splice(index, 1, _item);
+						}
+					} else if (addToState) {
+						this.addToStateData(state, _item, stateIsTarget);
+					}
 				}
 			};
 			items.forEach(item => {
