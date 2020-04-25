@@ -432,8 +432,10 @@ class Store extends BaseStore {
                 },
                 [_TYPES.STORE_IMPORT](state, data) {
                     state.imported = data;
-                    state.data.data.push([...data.data]);
-                    state.all = state.all.concat(data.data);
+                    if (data.data instanceof Array) {
+                        state.data.data.push([...data.data]);
+                        state.all = state.all.concat(data.data);
+                    }
                     return data;
                 },
                 [_TYPES.STORE_CREATE](state, data) {
