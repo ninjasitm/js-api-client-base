@@ -476,6 +476,9 @@ class Store extends BaseStore {
         },
       },
       ...{
+        [_TYPES.STORE_UPDATE_STATS](state, stats) {
+          return stats;
+        },
         [_TYPES.STORE_GET_FORM_CONFIG](state, config) {
           state.config.form = config;
         },
