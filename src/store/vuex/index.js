@@ -80,7 +80,7 @@ class Store extends BaseStore {
             status: {
               data: ``,
             },
-            appendsData: false,
+            appendData: false,
             data: {
               data: [],
             },
