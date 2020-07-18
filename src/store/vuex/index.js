@@ -15,6 +15,7 @@ const coreTypes = {
   STORE_CREATE: `STORE_CREATE`,
   STORE_UPDATE: `STORE_UPDATE`,
   STORE_IMPORT: `STORE_IMPORT`,
+  STORE_EXPORT: `STORE_EXPORT`,
   STORE_DELETE: `STORE_DELETE`,
   STORE_UPDATE_STATS: `STORE_UPDATE_STATS`,
   STORE_CREATE_CACHE_GET: `STORE_CREATE_CACHE_GET`,
@@ -70,25 +71,28 @@ class Store extends BaseStore {
   state(state, exclusive) {
     const extend = state instanceof Object ? state : {};
     const baseState =
-      exclusive === true
-        ? {}
-        : {
-            config: {
-              index: null,
-              form: null,
-            },
-            status: {
-              data: ``,
-            },
-            appendData: false,
-            data: {
-              data: [],
-            },
-            all: [],
-            imported: {
-              data: [],
-            },
-          };
+      exclusive === true ?
+      {} :
+      {
+        config: {
+          index: null,
+          form: null,
+        },
+        status: {
+          data: ``,
+        },
+        appendData: false,
+        data: {
+          data: [],
+        },
+        all: [],
+        imported: {
+          data: [],
+        },
+        exported: {
+          data: [],
+        },
+      };
     return {
       ...baseState,
       ...extend,
@@ -104,19 +108,19 @@ class Store extends BaseStore {
   getters(getters, exclusive) {
     const extend = getters instanceof Object ? getters : {};
     const baseGetters =
-      exclusive === true
-        ? {}
-        : {
-            config: (state) => state.config,
-            indexConfig: (state) => state.config.index,
-            formConfig: (state) => state.config.form,
-            data: (state) => state.data,
-            isAllLoaded: (state) =>
-              state.data instanceof Object &&
-              state.data.data instanceof Array &&
-              state.data.data.length > 0,
-            imported: (state) => state.imported,
-          };
+      exclusive === true ?
+      {} :
+      {
+        config: (state) => state.config,
+        indexConfig: (state) => state.config.index,
+        formConfig: (state) => state.config.form,
+        data: (state) => state.data,
+        isAllLoaded: (state) =>
+          state.data instanceof Object &&
+          state.data.data instanceof Array &&
+          state.data.data.length > 0,
+        imported: (state) => state.imported,
+      };
     const $log = this.$log;
     return {
       ...{
@@ -145,326 +149,326 @@ class Store extends BaseStore {
     type = type[0] + type.substr(1);
     const extend = actions instanceof Object ? actions : {};
     const baseActions =
-      exclusive === true
-        ? {}
-        : {
-            ...{
-              /**
-               * Get the index page config for the given type
-               * @param {Object} context
-               * @param {Object} params
-               * @param {boolean} force
-               * @returns {Promise}
-               */
-              getIndexConfig(context, params, force) {
-                const forceGet = force || true;
-                return new Promise((resolve, reject) => {
-                  if (!context.state.config.index || forceGet) {
-                    log.info(`[Store: ${type}]: GetIndexConfig`);
-                    return api.getIndexConfig(params).then((response) => {
-                      context.commit(
-                        coreTypes.STORE_GET_INDEX_CONFIG,
-                        response.data.data
-                      );
-                      resolve(context.state.config.index);
-                    });
-                  } else {
-                    log.info(
-                      `[Store: ${type}]: Getting existing index config`,
-                      params
-                    );
-                    resolve(context.state.config.index);
-                  }
+      exclusive === true ?
+      {} :
+      {
+        ...{
+          /**
+           * Get the index page config for the given type
+           * @param {Object} context
+           * @param {Object} params
+           * @param {boolean} force
+           * @returns {Promise}
+           */
+          getIndexConfig(context, params, force) {
+            const forceGet = force || true;
+            return new Promise((resolve, reject) => {
+              if (!context.state.config.index || forceGet) {
+                log.info(`[Store: ${type}]: GetIndexConfig`);
+                return api.getIndexConfig(params).then((response) => {
+                  context.commit(
+                    coreTypes.STORE_GET_INDEX_CONFIG,
+                    response.data.data
+                  );
+                  resolve(context.state.config.index);
                 });
-              },
-              /**
-               * Get the form config needed for creating or updating models
-               * @param {Object} context
-               * @param {object} params
-               * @param {boolean} force
-               * @returns {Promise}
-               */
-              getFormConfig(context, params, force) {
-                const forceGet = force || true;
-                return new Promise((resolve, reject) => {
-                  if (!context.state.config.form || forceGet) {
-                    log.info(`[Store: ${type}]: GetFormConfig`);
-                    return api.getFormConfig(params).then((response) => {
-                      context.commit(
-                        coreTypes.STORE_GET_FORM_CONFIG,
-                        response.data.data
-                      );
-                      resolve(context.state.config.form);
-                    });
-                  } else {
-                    log.info(
-                      `[Store: ${type}]: Getting existing form config`,
-                      params
-                    );
-                    resolve(context.state.config.form);
-                  }
-                });
-              },
-              /**
-               * Set the ability to append data to existing data
-               * @param {Object} context
-               * @param {Object} params
-               * @returns {Promise}
-               */
-              setAppendsData(context, params) {
-                log.info(`[Store: ${type}]: Set Appends Data ${type}`, params);
-                return Promise.resolve(
-                  context.commit(coreTypes.STORE_SET_APPENDS_DATA, params)
+              } else {
+                log.info(
+                  `[Store: ${type}]: Getting existing index config`,
+                  params
                 );
-              },
-              /**
-               * Get all of the items
-               * @param {Object} context
-               * @param {Object} params
-               * @returns {Promise}
-               */
-              getAll(context, params) {
-                log.info(`[Store: ${type}]: Get ${type}`, params);
-                return new Promise((resolve, reject) => {
-                  return api
-                    .getAll(params)
-                    .then((response) => {
-                      log.info(
-                        `[Store: ${type}]: Got all ${type}`,
-                        response.data
-                      );
-                      context.commit(coreTypes.STORE_GET_ALL, {
-                        params,
-                        result: response.data,
-                      });
-                      resolve(context.getters.data);
-                    })
-                    .catch((error) => {
-                      log.info(`[Store: ${type}]: Error getting all`, error);
-                      reject(error);
-                    });
+                resolve(context.state.config.index);
+              }
+            });
+          },
+          /**
+           * Get the form config needed for creating or updating models
+           * @param {Object} context
+           * @param {object} params
+           * @param {boolean} force
+           * @returns {Promise}
+           */
+          getFormConfig(context, params, force) {
+            const forceGet = force || true;
+            return new Promise((resolve, reject) => {
+              if (!context.state.config.form || forceGet) {
+                log.info(`[Store: ${type}]: GetFormConfig`);
+                return api.getFormConfig(params).then((response) => {
+                  context.commit(
+                    coreTypes.STORE_GET_FORM_CONFIG,
+                    response.data.data
+                  );
+                  resolve(context.state.config.form);
                 });
-              },
-              /**
-               * Set the data for the given type
-               * @param {Object} context
-               * @param {any} data
-               */
-              setAll(context, data) {
-                log.info(`[Store: ${type}]: Set data ${type}`, data);
-                return new Promise((resolve, reject) => {
-                  context.commit(coreTypes.STORE_SET_ALL, {
-                    type,
-                    context,
-                    data,
-                    result: data,
+              } else {
+                log.info(
+                  `[Store: ${type}]: Getting existing form config`,
+                  params
+                );
+                resolve(context.state.config.form);
+              }
+            });
+          },
+          /**
+           * Set the ability to append data to existing data
+           * @param {Object} context
+           * @param {Object} params
+           * @returns {Promise}
+           */
+          setAppendsData(context, params) {
+            log.info(`[Store: ${type}]: Set Appends Data ${type}`, params);
+            return Promise.resolve(
+              context.commit(coreTypes.STORE_SET_APPENDS_DATA, params)
+            );
+          },
+          /**
+           * Get all of the items
+           * @param {Object} context
+           * @param {Object} params
+           * @returns {Promise}
+           */
+          getAll(context, params) {
+            log.info(`[Store: ${type}]: Get ${type}`, params);
+            return new Promise((resolve, reject) => {
+              return api
+                .getAll(params)
+                .then((response) => {
+                  log.info(
+                    `[Store: ${type}]: Got all ${type}`,
+                    response.data
+                  );
+                  context.commit(coreTypes.STORE_GET_ALL, {
+                    params,
+                    result: response.data,
                   });
-                  resolve(data);
+                  resolve(context.getters.data);
+                })
+                .catch((error) => {
+                  log.info(`[Store: ${type}]: Error getting all`, error);
+                  reject(error);
                 });
-              },
-              /**
-               * Get the specific object with the given id
-               * @param {Object} context
-               * @param {number|string} id
-               * @returns {Promise}
-               */
-              getOne(context, id) {
-                log.info(`[Store: ${type}]: Get ${type}`, id);
-                return new Promise((resolve, reject) => {
-                  log.info(`[Store: ${type}]: Getting ${type}`, id);
-                  if (id) {
-                    return api
-                      .getOne(id)
-                      .then((response) => {
-                        context.commit(coreTypes.STORE_GET, {
-                          params: id,
-                          result: response.data.data,
-                        });
-                        resolve(response.data.data);
-                      })
-                      .catch((error) => {
-                        reject(error);
-                      });
-                  } else {
-                    resolve({});
-                  }
-                });
-              },
-              /**
-               * Set the given object in the local store
-               * @param {Object} context
-               * @param {any} data
-               * @returns {Promise}
-               */
-              setOne(context, data) {
-                log.info(`[Store: ${type}]: Set one ${type}`, params);
-                return new Promise((resolve, reject) => {
-                  context.commit(coreTypes.STORE_SET, {
+            });
+          },
+          /**
+           * Set the data for the given type
+           * @param {Object} context
+           * @param {any} data
+           */
+          setAll(context, data) {
+            log.info(`[Store: ${type}]: Set data ${type}`, data);
+            return new Promise((resolve, reject) => {
+              context.commit(coreTypes.STORE_SET_ALL, {
+                type,
+                context,
+                data,
+                result: data,
+              });
+              resolve(data);
+            });
+          },
+          /**
+           * Get the specific object with the given id
+           * @param {Object} context
+           * @param {number|string} id
+           * @returns {Promise}
+           */
+          getOne(context, id) {
+            log.info(`[Store: ${type}]: Get ${type}`, id);
+            return new Promise((resolve, reject) => {
+              log.info(`[Store: ${type}]: Getting ${type}`, id);
+              if (id) {
+                return api
+                  .getOne(id)
+                  .then((response) => {
+                    context.commit(coreTypes.STORE_GET, {
+                      params: id,
+                      result: response.data.data,
+                    });
+                    resolve(response.data.data);
+                  })
+                  .catch((error) => {
+                    reject(error);
+                  });
+              } else {
+                resolve({});
+              }
+            });
+          },
+          /**
+           * Set the given object in the local store
+           * @param {Object} context
+           * @param {any} data
+           * @returns {Promise}
+           */
+          setOne(context, data) {
+            log.info(`[Store: ${type}]: Set one ${type}`, params);
+            return new Promise((resolve, reject) => {
+              context.commit(coreTypes.STORE_SET, {
+                type,
+                context,
+                params,
+                result: data,
+              });
+              resolve(data);
+            });
+          },
+          /**
+           * Get the specific object with the given id in the lcoal cache
+           * @param {Object} context
+           * @param {number|string} id
+           * @returns {Promise}
+           */
+          getOneCached(context, id) {
+            log.info(`[Store: ${type}]: GetOneCached`, id);
+            return new Promise((resolve, reject) => {
+              if (utils.findItemInState(state, id) === -1) {
+                return this.getOneCahced(context, id);
+              } else {
+                log.info(`[Store: ${type}]: Getting existing ${type}`, id);
+                resolve(utils.getItemInState(state, id));
+              }
+            });
+          },
+          /**
+           * Save the given data to the store
+           * @param {Object} context
+           * @param {Object} params
+           * @returns {Promise}
+           */
+          save(context, params) {
+            log.info(`[Store: ${type}]: Save ${type}`, params);
+            return new Promise((resolve, reject) => {
+              return api
+                .save(params)
+                .then((response) => {
+                  log.info(`[Store: ${type}]: Saved ${type}`, response);
+                  const data = response.data.data;
+                  context.commit(coreTypes.STORE_SAVE, {
                     type,
                     context,
                     params,
                     result: data,
                   });
                   resolve(data);
+                })
+                .catch((error) => {
+                  log.info(`[Store: ${type}]: Error Saving ${type}`, error);
+                  reject(error);
                 });
-              },
-              /**
-               * Get the specific object with the given id in the lcoal cache
-               * @param {Object} context
-               * @param {number|string} id
-               * @returns {Promise}
-               */
-              getOneCached(context, id) {
-                log.info(`[Store: ${type}]: GetOneCached`, id);
-                return new Promise((resolve, reject) => {
-                  if (utils.findItemInState(state, id) === -1) {
-                    return this.getOneCahced(context, id);
-                  } else {
-                    log.info(`[Store: ${type}]: Getting existing ${type}`, id);
-                    resolve(utils.getItemInState(state, id));
-                  }
+            });
+          },
+          /**
+           * Import the given data into the store
+           * @param {Object} context
+           * @param {Object} params
+           * @returns {Promise}
+           */
+          import(context, params) {
+            log.info(`[Store: ${type}]: Import`, params);
+            return new Promise((resolve, reject) => {
+              return api
+                .import(params)
+                .then((response) => {
+                  log.info(`[Store: ${type}]: Imported`, response);
+                  const data = response.data;
+                  context.commit(coreTypes.STORE_IMPORT, data);
+                  resolve(data);
+                })
+                .catch((error) => {
+                  log.info(`[Store: ${type}]: Error Importing`, error);
+                  reject(error);
                 });
-              },
-              /**
-               * Save the given data to the store
-               * @param {Object} context
-               * @param {Object} params
-               * @returns {Promise}
-               */
-              save(context, params) {
-                log.info(`[Store: ${type}]: Save ${type}`, params);
-                return new Promise((resolve, reject) => {
-                  return api
-                    .save(params)
-                    .then((response) => {
-                      log.info(`[Store: ${type}]: Saved ${type}`, response);
-                      const data = response.data.data;
-                      context.commit(coreTypes.STORE_SAVE, {
-                        type,
-                        context,
-                        params,
-                        result: data,
-                      });
-                      resolve(data);
-                    })
-                    .catch((error) => {
-                      log.info(`[Store: ${type}]: Error Saving ${type}`, error);
-                      reject(error);
+            });
+          },
+          /**
+           * Export the given data into the store
+           * @param {Object} context
+           * @param {Object} params
+           * @returns {Promise}
+           */
+          export (context, params) {
+            log.info(`[Store: ${type}]: Export`, params);
+            return new Promise((resolve, reject) => {
+              return api
+                .export(params)
+                .then((response) => {
+                  log.info(`[Store: ${type}]: Exported`, response);
+                  const data = response.data;
+                  context.commit(coreTypes.STORE_IMPORT, data);
+                  resolve(data);
+                })
+                .catch((error) => {
+                  log.info(`[Store: ${type}]: Error Exporting`, error);
+                  reject(error);
+                });
+            });
+          },
+          /**
+           * Delete the given data from the store
+           * @param {Object} context
+           * @param {any} params
+           * @returns {Promise}
+           */
+          delete(context, params) {
+            log.info(`[Store: ${type}]: Delete ${type}`, params);
+            return new Promise((resolve, reject) => {
+              if (params) {
+                return api
+                  .delete(params)
+                  .then((response) => {
+                    log.info(
+                      `[Store: ${type}]: Deleted ${type}`,
+                      response.data.data
+                    );
+                    context.commit(coreTypes.STORE_DELETE, {
+                      type,
+                      context,
+                      params: params,
+                      result: response.data.data,
                     });
+                    resolve(response.data.data);
+                  })
+                  .catch((error) => {
+                    reject(error);
+                  });
+              } else {
+                reject(`[Store: ${type}]: Null params`);
+              }
+            });
+          },
+          /**
+           * Toggle the given data from the store
+           * @param {Object} context
+           * @param {any} params
+           * @returns {Promise}
+           */
+          toggle(context, params, attr) {
+            log.info(`[Store: ${type}]: Toggle ${type}`, params);
+            return new Promise((resolve, reject) => {
+              return api
+                .toggle(params)
+                .then((response) => {
+                  log.info(`[Store: ${type}]: Toggled ${type}`, response);
+                  const data = response.data.data;
+                  context.commit(coreTypes.STORE_SAVE, {
+                    type,
+                    context,
+                    params,
+                    result: data,
+                  });
+                  resolve(data);
+                })
+                .catch((error) => {
+                  log.info(
+                    `[Store: ${type}]: Error Toggling ${type}`,
+                    error
+                  );
+                  reject(error);
                 });
-              },
-              /**
-               * Import the given data into the store
-               * @param {Object} context
-               * @param {Object} params
-               * @returns {Promise}
-               */
-              import(context, params) {
-                log.info(`[Store: ${type}]: Import`, params);
-                return new Promise((resolve, reject) => {
-                  return api
-                    .import(params)
-                    .then((response) => {
-                      log.info(`[Store: ${type}]: Imported`, response);
-                      const data = response.data;
-                      context.commit(coreTypes.STORE_IMPORT, data);
-                      resolve(data);
-                    })
-                    .catch((error) => {
-                      log.info(`[Store: ${type}]: Error Importing`, error);
-                      reject(error);
-                    });
-                });
-              },
-              /**
-               * Export the given data into the store
-               * @param {Object} context
-               * @param {Object} params
-               * @returns {Promise}
-               */
-              export(context, params) {
-                log.info(`[Store: ${type}]: Export`, params);
-                return new Promise((resolve, reject) => {
-                  return api
-                    .export(params)
-                    .then((response) => {
-                      log.info(`[Store: ${type}]: Exported`, response);
-                      const data = response.data;
-                      context.commit(coreTypes.STORE_IMPORT, data);
-                      resolve(data);
-                    })
-                    .catch((error) => {
-                      log.info(`[Store: ${type}]: Error Exporting`, error);
-                      reject(error);
-                    });
-                });
-              },
-              /**
-               * Delete the given data from the store
-               * @param {Object} context
-               * @param {any} params
-               * @returns {Promise}
-               */
-              delete(context, params) {
-                log.info(`[Store: ${type}]: Delete ${type}`, params);
-                return new Promise((resolve, reject) => {
-                  if (params) {
-                    return api
-                      .delete(params)
-                      .then((response) => {
-                        log.info(
-                          `[Store: ${type}]: Deleted ${type}`,
-                          response.data.data
-                        );
-                        context.commit(coreTypes.STORE_DELETE, {
-                          type,
-                          context,
-                          params: params,
-                          result: response.data.data,
-                        });
-                        resolve(response.data.data);
-                      })
-                      .catch((error) => {
-                        reject(error);
-                      });
-                  } else {
-                    reject(`[Store: ${type}]: Null params`);
-                  }
-                });
-              },
-              /**
-               * Toggle the given data from the store
-               * @param {Object} context
-               * @param {any} params
-               * @returns {Promise}
-               */
-              toggle(context, params, attr) {
-                log.info(`[Store: ${type}]: Toggle ${type}`, params);
-                return new Promise((resolve, reject) => {
-                  return api
-                    .toggle(params)
-                    .then((response) => {
-                      log.info(`[Store: ${type}]: Toggled ${type}`, response);
-                      const data = response.data.data;
-                      context.commit(coreTypes.STORE_SAVE, {
-                        type,
-                        context,
-                        params,
-                        result: data,
-                      });
-                      resolve(data);
-                    })
-                    .catch((error) => {
-                      log.info(
-                        `[Store: ${type}]: Error Toggling ${type}`,
-                        error
-                      );
-                      reject(error);
-                    });
-                });
-              },
-            },
-          };
+            });
+          },
+        },
+      };
 
     return {
       ...{
@@ -527,6 +531,10 @@ class Store extends BaseStore {
             state.data.data.push([...data.data]);
             state.all = state.all.concat(data.data);
           }
+          return data;
+        },
+        [_TYPES.STORE_EXPORT](state, data) {
+          state.exported = data;
           return data;
         },
         [_TYPES.STORE_CREATE](state, data) {
