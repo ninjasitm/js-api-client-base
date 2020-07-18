@@ -139,39 +139,36 @@ class BaseApi {
 	 */
 	createProxy() {
 		const instance = this;
-		return new Proxy(
-			{},
-			{
-				get(target, propKey) {
-					const property = propKey ? propKey.toLowerCase() : "get";
-					const method = this.api().hasOwnProperty(property) ? property : null;
+		return new Proxy({}, {
+			get(target, propKey) {
+				const property = propKey ? propKey.toLowerCase() : "get";
+				const method = this.api().hasOwnProperty(property) ? property : null;
 
-					if (!method) return;
+				if (!method) return;
 
-					const path =
-						instance.getUrl(propKey) +
-						"/"
-							.substring(method.length)
-							.replace(/([a-z])([A-Z])/g, "$1/$2")
-							.replace(/\$/g, "/$/")
-							.toLowerCase();
-					return (...args) => {
-						const finalPath = path.replace(/\$/g, () => args.shift());
-						const body = args.shift() || {};
-						const params = args.shift() || body;
-						if (["post", "put", "patch"].indexOf(method) !== -1) {
-							return this.api()[property](finalPath, body, {
-								params
-							});
-						} else {
-							return this.api()[property](finalPath, {
-								params
-							});
-						}
-					};
-				}
+				const path =
+					instance.getUrl(propKey) +
+					"/"
+					.substring(method.length)
+					.replace(/([a-z])([A-Z])/g, "$1/$2")
+					.replace(/\$/g, "/$/")
+					.toLowerCase();
+				return (...args) => {
+					const finalPath = path.replace(/\$/g, () => args.shift());
+					const body = args.shift() || {};
+					const params = args.shift() || body;
+					if (["post", "put", "patch"].indexOf(method) !== -1) {
+						return this.api()[property](finalPath, body, {
+							params
+						});
+					} else {
+						return this.api()[property](finalPath, {
+							params
+						});
+					}
+				};
 			}
-		);
+		});
 	}
 
 	/**
@@ -215,7 +212,10 @@ class BaseApi {
 	getIndexConfig(params, options) {
 		const id = params instanceof Object ? params.id : params;
 		this.log().info(`[Services: ${this.type}]: GetIndexConfig`);
-		const { getter, endPoint } = options || {};
+		const {
+			getter,
+			endPoint
+		} = options || {};
 		return this.api()
 			.get(
 				`${this.getUrl(
@@ -240,7 +240,10 @@ class BaseApi {
 	getFormConfig(params, options) {
 		const id = params instanceof Object ? params.id : params;
 		this.log().info(`[Services: ${this.type}]: GetFormConfig`);
-		const { getter, endPoint } = options || {};
+		const {
+			getter,
+			endPoint
+		} = options || {};
 		const idPart = id ? "/" + id : "";
 		return this.api()
 			.get(
@@ -266,7 +269,10 @@ class BaseApi {
 	 */
 	getAll(params, options) {
 		this.log().info(`[Services: ${this.type}]: Get All ${this.type}`, params);
-		const { getter, endPoint } = options || {};
+		const {
+			getter,
+			endPoint
+		} = options || {};
 		return this.api()
 			.get(this.getUrl(getter || "getAll", endPoint || null, params), {
 				params: params
@@ -291,11 +297,13 @@ class BaseApi {
 	getOne(params, options) {
 		const id = params instanceof Object ? params.id : params;
 		this.log().info(`[Services: ${this.type}]: Get ${this.type}`, id);
-		const { getter, endPoint } = options || {};
+		const {
+			getter,
+			endPoint
+		} = options || {};
 		return this.api()
 			.get(
-				this.getUrl(getter || "getOne", endPoint || null, params) + "/" + id,
-				{
+				this.getUrl(getter || "getOne", endPoint || null, params) + "/" + id, {
 					params
 				}
 			)
@@ -326,10 +334,12 @@ class BaseApi {
 			id
 		);
 		const method = id ? `post` : `post`;
-		const { getter, endPoint } = options || {};
+		const {
+			getter,
+			endPoint
+		} = options || {};
 		const idPart = id ? "/" + id : "";
-		return this.api()
-			[method](
+		return this.api()[method](
 				`${this.getUrl(
 					getter || "save",
 					endPoint || null,
@@ -357,11 +367,37 @@ class BaseApi {
 	import(params, options) {
 		const data = this.utils.createFormData(params);
 		this.log().info(`[Services: ${this.type}]: Import ${this.type}`, data);
-		const { getter, endPoint } = options || {};
+		const {
+			getter,
+			endPoint
+		} = options || {};
 		return this.api()
 			.post(this.getUrl(getter || "import", endPoint || "import", params), data)
 			.catch(error => {
 				this.log().warn(`[Services: ${this.type}: Import]: Error`, error);
+				throw this.utils.resolveError(error);
+			});
+	}
+
+	/**
+	 * Export many items
+	 *
+	 * @param {Object} params
+	 * @param {Object} options
+	 * @returns {Promise}
+	 * @memberof BaseApi
+	 */
+	export (params, options) {
+		const data = this.utils.createFormData(params);
+		this.log().info(`[Services: ${this.type}]: Export ${this.type}`, data);
+		const {
+			getter,
+			endPoint
+		} = options || {};
+		return this.api()
+			.post(this.getUrl(getter || "export", endPoint || "export", params), data)
+			.catch(error => {
+				this.log().warn(`[Services: ${this.type}: Export]: Error`, error);
 				throw this.utils.resolveError(error);
 			});
 	}
@@ -380,11 +416,13 @@ class BaseApi {
 		const bodyParams = params.body || {};
 		const dataParams = params.data || {};
 		this.log().info(`[Services: ${this.type}]: Delete ${this.type}`, id);
-		const { getter, endPoint } = options || {};
+		const {
+			getter,
+			endPoint
+		} = options || {};
 		return this.api()
 			.delete(
-				this.getUrl(getter || "delete", endPoint || null, params) + "/" + id,
-				{
+				this.getUrl(getter || "delete", endPoint || null, params) + "/" + id, {
 					params: urlParams,
 					body: bodyParams,
 					data: dataParams
@@ -410,7 +448,10 @@ class BaseApi {
 	toggle(params, options) {
 		const id = params.id || params;
 		this.log().info(`[Services: ${this.type}]: Toggle ${this.type}`, id);
-		const { getter, endPoint } = options || {};
+		const {
+			getter,
+			endPoint
+		} = options || {};
 		return this.api()
 			.put(
 				this.getUrl(getter || "toggle", endPoint || "toggle", params) + "/" + id

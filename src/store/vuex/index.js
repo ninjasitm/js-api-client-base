@@ -377,6 +377,29 @@ class Store extends BaseStore {
                 });
               },
               /**
+               * Export the given data into the store
+               * @param {Object} context
+               * @param {Object} params
+               * @returns {Promise}
+               */
+              export(context, params) {
+                log.info(`[Store: ${type}]: Export`, params);
+                return new Promise((resolve, reject) => {
+                  return api
+                    .export(params)
+                    .then((response) => {
+                      log.info(`[Store: ${type}]: Exported`, response);
+                      const data = response.data;
+                      context.commit(coreTypes.STORE_IMPORT, data);
+                      resolve(data);
+                    })
+                    .catch((error) => {
+                      log.info(`[Store: ${type}]: Error Exporting`, error);
+                      reject(error);
+                    });
+                });
+              },
+              /**
                * Delete the given data from the store
                * @param {Object} context
                * @param {any} params
