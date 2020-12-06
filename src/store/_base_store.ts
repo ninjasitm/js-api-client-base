@@ -1,14 +1,19 @@
 import defaultLogger from "../logger";
+import { IApi, IStoreOptions, IJsApi, IStore } from "../types";
 
-class BaseStore {
-	constructor(_props) {
-		this.init(_props);
+class Store implements IStore {
+	$log: any;
+	$app: any;
+	$api: any;
+	allTypes: any;
+
+	constructor(props: IStoreOptions) {
+		this.init(props);
 		// Instantiate the logger
 		this.$log = this.$log || defaultLogger.create();
 	}
 
-	init(_props) {
-		const props = _props instanceof Object ? _props : {};
+	init(props: IStoreOptions) {
 		this.allTypes = {};
 		this.setApp(props.app);
 		this.setApi(props.api);
@@ -43,7 +48,7 @@ class BaseStore {
 	 * Set the api
 	 * @param {Object} api
 	 */
-	setApi(api) {
+	setApi(api: IApi) {
 		if (api instanceof Object) {
 			try {
 				api.setApp(this.$app);
@@ -68,7 +73,7 @@ class BaseStore {
 	 * Set the app
 	 * @param {Object} app
 	 */
-	setApp(app) {
+	setApp(app: any) {
 		if (app instanceof Object) {
 			this.$app = app;
 		}
@@ -84,7 +89,7 @@ class BaseStore {
 	 *  debug: function
 	 * }
 	 */
-	setLogger(logger) {
+	setLogger(logger: any) {
 		this.$log = logger;
 	}
 
@@ -92,9 +97,9 @@ class BaseStore {
 	 * Utility function to create the logger with the desired level
 	 * @param {string} level
 	 */
-	createLogger(level) {
+	createLogger(level: string = 'INFO') {
 		this.$log = defaultLogger.create(level);
 	}
 }
 
-export default BaseStore;
+export default Store;

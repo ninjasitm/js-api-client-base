@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "esModuleInterop": true,
+        "declaration": true,
+        "declarationDir": "./dist",
+        "outDir": "./dist",
+        "allowJs": true,
+        "target": "es5",
+        "strict": true,
+        "lib": ["es2017", "es7", "es6", "dom"],
+        "module": "CommonJS",
+        "moduleResolution": "node"
+    },
+    "typedocOptions": {
+        "mode": "modules",
+        "out": "docs"
+    },
+    "include": [
+        "src/**/*", "types.d.ts"
+    ],
+    "exclude": ["node_modules"]
+}

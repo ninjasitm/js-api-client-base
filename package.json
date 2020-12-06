@@ -2,11 +2,18 @@
 	"name": "@nitm/js-api-client-base",
 	"version": "0.4.4",
 	"description": "Javascript API client base. Use this to develop services for react, vue or others using axios",
-	"main": "src/index.js",
+	"main": "./dist/index.js",
+	"types": "./dist/types.d.ts",
+	"files": [
+		"/dist",
+		"CHANGELOG",
+		"README"
+	],
 	"scripts": {
-		"lint": "jshint src/**/*.js test/*.js",
-		"test": "mocha --require @babel/register --exit",
-		"build": "npm run build:version",
+		"lint": "tsc",
+		"test": "ts-mocha -p tsconfig.json test/*.spec.ts",
+		"build": "tsc",
+		"prepare": "npm run build",
 		"build:version": "cross-env replace -s 'VERSION = \"[^\"]+\"' \"VERSION = \\\"$npm_package_version\\\"\" src/index.js"
 	},
 	"repository": {
@@ -19,11 +26,6 @@
 		"url": "https://gitlab.com/nitm/js-api-client-base/issues"
 	},
 	"homepage": "https://gitlab.com/nitm/js-api-client-base#readme",
-	"files": [
-		"/src",
-		"CHANGELOG",
-		"README"
-	],
 	"devDependencies": {
 		"@babel/cli": "^7.6.4",
 		"@babel/core": "^7.6.4",
@@ -32,6 +34,8 @@
 		"@babel/plugin-proposal-export-namespace-from": "^7.5.2",
 		"@babel/preset-env": "^7.6.3",
 		"@babel/register": "^7.6.2",
+		"@types/expect": "^24.3.0",
+		"@types/mocha": "^8.0.4",
 		"chai": "^4.2.0",
 		"cross-env": "^5.2.1",
 		"jshint": "^2.9.6",
@@ -40,10 +44,21 @@
 		"nodemon": "^1.19.4",
 		"replace": "^1.1.1",
 		"rimraf": "^2.7.1",
+		"ts-mocha": "^8.0.0",
+		"typescript": "^4.1.2",
 		"uglify-js": "^3.6.4"
 	},
 	"dependencies": {
 		"axios": "^0.19.0",
 		"js-logger": "^1.6.0"
+	},
+	"gitHooks": {
+		"pre-commit": "npm run lint && git add ."
+	},
+	"lint-staged": {
+		"*.{js,jsx,vue,ts,tsx}": [
+			"vue-cli-service lint",
+			"git add"
+		]
 	}
 }
