@@ -2,21 +2,29 @@ import base from "../../services/utils";
 const utils: any = {
 	...base,
 	...{
-		addToStateData(state: any, originalItem: any, stateIsTarget: boolean = true, push: boolean = false) {
-			const addData = function(_state: any, _item: any) {
+		addToStateData(
+			state: Array<any> | any,
+			originalItem: any,
+			stateIsTarget: boolean = true,
+			push: boolean = false
+		) {
+			const addData = function (_state: Array<any> | any, _item: any) {
 				if (_state instanceof Array) {
-					const filteredState = _state.filter(c => c instanceof Object);
+					const filteredState: Array<any> = _state.filter(
+						(c) => c instanceof Object
+					);
 					const index = filteredState.findIndex(
-						(current: any) => current instanceof Object && current.id === _item.id
+						(current: any) =>
+							current instanceof Object && current.id === _item.id
 					);
 					if (index > -1) {
 						const existing = filteredState.find(
-							current => current instanceof Object && current.id === _item.id
+							(current) => current instanceof Object && current.id === _item.id
 						);
 						if (existing instanceof Object) {
 							_state.splice(index, 1, {
 								...existing,
-								..._item
+								..._item,
 							});
 						} else {
 							_state.splice(index, 1, _item);
@@ -30,7 +38,7 @@ const utils: any = {
 			};
 			const items =
 				originalItem instanceof Array ? originalItem : [originalItem];
-			items.forEach(item => {
+			items.forEach((item) => {
 				if (stateIsTarget === true) {
 					addData(state, item);
 				} else {
@@ -40,27 +48,30 @@ const utils: any = {
 				}
 			});
 		},
-		updateStateData(state: any, originalItem: any, stateIsTarget: boolean = true, addToState: boolean = false) {
+		updateStateData(
+			state: Array<any> | any,
+			originalItem: any,
+			stateIsTarget: boolean = true,
+			addToState: boolean = false
+		) {
 			const items =
 				originalItem instanceof Array ? originalItem : [originalItem];
-			const updateData = function(_state: any, _item: any) {
-				const filteredState = _state.filter((c: any) => c instanceof Object);
-				const index = filteredState.findIndex(
-					(current: any) => current instanceof Object && current.id === _item.id
-				);
+			const updateData = function (_state: Array<any> | any, _item: any) {
 				if (_state instanceof Array) {
-					const filteredState = _state.filter(c => c instanceof Object);
+					const filteredState: Array<any> = _state.filter(
+						(c) => c instanceof Object
+					);
 					const index = filteredState.findIndex(
-						current => current instanceof Object && current.id === _item.id
+						(current) => current instanceof Object && current.id === _item.id
 					);
 					if (index > -1) {
 						const existing = filteredState.find(
-							current => current instanceof Object && current.id === _item.id
+							(current) => current instanceof Object && current.id === _item.id
 						);
 						if (existing instanceof Object) {
 							_state.splice(index, 1, {
 								...existing,
-								..._item
+								..._item,
 							});
 						} else {
 							_state.splice(index, 1, _item);
@@ -70,7 +81,7 @@ const utils: any = {
 					}
 				}
 			};
-			items.forEach(item => {
+			items.forEach((item) => {
 				if (stateIsTarget === true) {
 					updateData(state, item);
 				} else {
@@ -78,24 +89,30 @@ const utils: any = {
 				}
 			});
 		},
-		removeFromStateData(state: any, originalItem: any, stateIsTarget: boolean = true) {
+		removeFromStateData(
+			state: Array<any> | any,
+			originalItem: any,
+			stateIsTarget: boolean = true
+		) {
 			const items =
 				originalItem instanceof Array ? originalItem : [originalItem];
-			const removeData = function(_state: any, _item: any) {
-				const index = _state.findIndex((current: any) => {
-					if (current instanceof Object) {
-						return current.id === _item;
-					} else if (_item instanceof Function) {
-						return _item(current);
-					} else {
-						return current === _item;
+			const removeData = function (_state: Array<any> | any, _item: any) {
+				if (_state instanceof Array) {
+					const index = _state.findIndex((current: any) => {
+						if (current instanceof Object) {
+							return current.id === _item;
+						} else if (_item instanceof Function) {
+							return _item(current);
+						} else {
+							return current === _item;
+						}
+					});
+					if (index > -1) {
+						_state.splice(index, 1);
 					}
-				});
-				if (index > -1) {
-					_state.splice(index, 1);
 				}
 			};
-			items.forEach(item => {
+			items.forEach((item) => {
 				const id = item instanceof Object ? item.id : item;
 				if (stateIsTarget === true) {
 					removeData(state, id);
@@ -105,7 +122,11 @@ const utils: any = {
 				}
 			});
 		},
-		findItemInState(state: any, item: any, stateIsTarget: boolean = true) {
+		findItemInState(
+			state: Array<any> | any,
+			item: any,
+			stateIsTarget: boolean = true
+		) {
 			const itemId = item instanceof Object ? item.id : item;
 			if (stateIsTarget === true) {
 				return state.findIndex(
@@ -117,7 +138,11 @@ const utils: any = {
 				);
 			}
 		},
-		getItemInState(state: any, item: any, stateIsTarget: boolean = true) {
+		getItemInState(
+			state: Array<any> | any,
+			item: any,
+			stateIsTarget: boolean = true
+		) {
 			const itemId = item instanceof Object ? item.id : item;
 			if (stateIsTarget === true) {
 				return state.find((current: any) => current.id == itemId);
@@ -126,7 +151,7 @@ const utils: any = {
 					(current: any) => current instanceof Object && current.id == itemId
 				);
 			}
-		}
-	}
+		},
+	},
 };
-export default utils
+export default utils;

@@ -581,7 +581,7 @@ class Store extends BaseStore implements IStore {
             state.cachedCreateStore || {},
             data
           );
-          let realWindow:any = window || null;
+          let realWindow:any = typeof window !== 'undefined' ? window : null;
           if (realWindow && realWindow instanceof Object) {
             realWindow.localStorage.setItem(
               `cachedCreate${type}`,
@@ -591,7 +591,7 @@ class Store extends BaseStore implements IStore {
         },
         [_TYPES.STORE_CREATE_CACHE_REMOVE](state: any, type: string) {
           state.cachedCreateStore = null;
-          let realWindow: any = window || null;
+          let realWindow:any = typeof window !== 'undefined' ? window : null;
           if (realWindow && realWindow instanceof Object) {
             realWindow.localStorage.removeItem(`cachedCreate${type}`);
           }
