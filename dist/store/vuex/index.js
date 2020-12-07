@@ -34,7 +34,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var lodash_1 = __importDefault(require("lodash"));
+var _ = require("lodash");
 var utils_1 = __importDefault(require("./utils"));
 var _base_store_1 = __importDefault(require("../_base_store"));
 // Store types
@@ -59,10 +59,9 @@ var coreTypes = {
 };
 var Store = /** @class */ (function (_super) {
     __extends(Store, _super);
-    function Store(_props) {
-        var _this = this;
-        var props = _props instanceof Object ? _props : {};
-        _this = _super.call(this, props) || this;
+    function Store(props) {
+        if (props === void 0) { props = {}; }
+        var _this = _super.call(this, props) || this;
         _this.utils = utils_1.default;
         _this.coreTypes = coreTypes;
         return _this;
@@ -75,7 +74,7 @@ var Store = /** @class */ (function (_super) {
         var _this = this;
         var allModules = {};
         Object.keys(modules).map(function (module) {
-            var clone = lodash_1.default.clone(_this, true);
+            var clone = _.clone(_this, true);
             var moduleObject = modules[module](clone);
             moduleObject.log = _this.log;
             moduleObject.app = _this.app;
@@ -101,6 +100,7 @@ var Store = /** @class */ (function (_super) {
      * @returns
      */
     Store.prototype.state = function (state, exclusive) {
+        if (exclusive === void 0) { exclusive = false; }
         var extend = state instanceof Object ? state : {};
         var baseState = exclusive === true ?
             {} :
@@ -133,6 +133,7 @@ var Store = /** @class */ (function (_super) {
      * @returns
      */
     Store.prototype.getters = function (getters, exclusive) {
+        if (exclusive === void 0) { exclusive = false; }
         var extend = getters instanceof Object ? getters : {};
         var baseGetters = exclusive === true ?
             {} :
@@ -165,9 +166,11 @@ var Store = /** @class */ (function (_super) {
      * @returns
      */
     Store.prototype.actions = function (actions, _type, exclusive) {
+        if (_type === void 0) { _type = 'unknown'; }
+        if (exclusive === void 0) { exclusive = false; }
         var api = this.api();
         var log = this.log();
-        var type = _type || "unknown";
+        var type = _type;
         type = type[0] + type.substr(1);
         var extend = actions instanceof Object ? actions : {};
         var baseActions = exclusive === true ?
@@ -180,6 +183,8 @@ var Store = /** @class */ (function (_super) {
              * @returns {Promise}
              */
             getIndexConfig: function (context, params, force) {
+                if (params === void 0) { params = {}; }
+                if (force === void 0) { force = false; }
                 var forceGet = force || true;
                 return new Promise(function (resolve, reject) {
                     if (!context.state.config.index || forceGet) {
@@ -203,6 +208,8 @@ var Store = /** @class */ (function (_super) {
              * @returns {Promise}
              */
             getFormConfig: function (context, params, force) {
+                if (params === void 0) { params = {}; }
+                if (force === void 0) { force = false; }
                 var forceGet = force || true;
                 return new Promise(function (resolve, reject) {
                     if (!context.state.config.form || forceGet) {
@@ -225,6 +232,7 @@ var Store = /** @class */ (function (_super) {
              * @returns {Promise}
              */
             setAppendsData: function (context, params) {
+                if (params === void 0) { params = {}; }
                 log.info("[Store: " + type + "]: Set Appends Data " + type, params);
                 return Promise.resolve(context.commit(coreTypes.STORE_SET_APPENDS_DATA, params));
             },
@@ -235,6 +243,7 @@ var Store = /** @class */ (function (_super) {
              * @returns {Promise}
              */
             getAll: function (context, params) {
+                if (params === void 0) { params = {}; }
                 log.info("[Store: " + type + "]: Get " + type, params);
                 return new Promise(function (resolve, reject) {
                     return api
@@ -259,6 +268,7 @@ var Store = /** @class */ (function (_super) {
              * @param {any} data
              */
             setAll: function (context, data) {
+                if (data === void 0) { data = {}; }
                 log.info("[Store: " + type + "]: Set data " + type, data);
                 return new Promise(function (resolve, reject) {
                     context.commit(coreTypes.STORE_SET_ALL, {
@@ -277,6 +287,7 @@ var Store = /** @class */ (function (_super) {
              * @returns {Promise}
              */
             getOne: function (context, id) {
+                if (id === void 0) { id = {}; }
                 log.info("[Store: " + type + "]: Get " + type, id);
                 return new Promise(function (resolve, reject) {
                     log.info("[Store: " + type + "]: Getting " + type, id);
@@ -306,12 +317,13 @@ var Store = /** @class */ (function (_super) {
              * @returns {Promise}
              */
             setOne: function (context, data) {
-                log.info("[Store: " + type + "]: Set one " + type, params);
+                if (data === void 0) { data = {}; }
+                log.info("[Store: " + type + "]: Set one " + type, data);
                 return new Promise(function (resolve, reject) {
                     context.commit(coreTypes.STORE_SET, {
                         type: type,
                         context: context,
-                        params: params,
+                        data: data,
                         result: data,
                     });
                     resolve(data);
@@ -327,12 +339,12 @@ var Store = /** @class */ (function (_super) {
                 var _this = this;
                 log.info("[Store: " + type + "]: GetOneCached", id);
                 return new Promise(function (resolve, reject) {
-                    if (utils_1.default.findItemInState(state, id) === -1) {
-                        return _this.getOneCahced(context, id);
+                    if (utils_1.default.findItemInState(context.state, id) === -1) {
+                        return _this.getOneCached(context, id);
                     }
                     else {
                         log.info("[Store: " + type + "]: Getting existing " + type, id);
-                        resolve(utils_1.default.getItemInState(state, id));
+                        resolve(utils_1.default.getItemInState(context.state, id));
                     }
                 });
             },
@@ -564,18 +576,18 @@ var Store = /** @class */ (function (_super) {
             _a[_TYPES.STORE_CREATE_CACHE_GET] = function (state, options) {
                 return state.cachedCreateStore;
             },
-            _a[_TYPES.STORE_CREATE_CACHE_UPDATE] = function (state, data) {
+            _a[_TYPES.STORE_CREATE_CACHE_UPDATE] = function (state, data, type) {
                 state.cachedCreateStore = Object.assign(state.cachedCreateStore || {}, data);
-                var window = window || null;
-                if (window && window instanceof Object) {
-                    window.localStorage.setItem("cachedCreate" + type, JSON.stringify(state.cachedCreateStore));
+                var realWindow = window || null;
+                if (realWindow && realWindow instanceof Object) {
+                    realWindow.localStorage.setItem("cachedCreate" + type, JSON.stringify(state.cachedCreateStore));
                 }
             },
-            _a[_TYPES.STORE_CREATE_CACHE_REMOVE] = function (state) {
+            _a[_TYPES.STORE_CREATE_CACHE_REMOVE] = function (state, type) {
                 state.cachedCreateStore = null;
-                var window = window || null;
-                if (window && window instanceof Object) {
-                    window.localStorage.removeItem("cachedCreate" + type);
+                var realWindow = window || null;
+                if (realWindow && realWindow instanceof Object) {
+                    realWindow.localStorage.removeItem("cachedCreate" + type);
                 }
             },
             _a)), extend);

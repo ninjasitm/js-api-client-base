@@ -13,7 +13,8 @@ export interface IStore {
 	$log: any,
 	$app: any,
 	$api: any,
-	allTypes: any,
+	coreTypes?: object,
+	allTypes?: any,
 }
 
 export interface IStoreOptions extends Object {

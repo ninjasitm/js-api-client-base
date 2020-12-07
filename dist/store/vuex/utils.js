@@ -15,8 +15,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var utils_1 = __importDefault(require("../../services/utils"));
-exports.default = __assign(__assign({}, utils_1.default), {
+var utils = __assign(__assign({}, utils_1.default), {
     addToStateData: function (state, originalItem, stateIsTarget, push) {
+        if (stateIsTarget === void 0) { stateIsTarget = true; }
+        if (push === void 0) { push = false; }
         var addData = function (_state, _item) {
             if (_state instanceof Array) {
                 var filteredState = _state.filter(function (c) { return c instanceof Object; });
@@ -51,6 +53,8 @@ exports.default = __assign(__assign({}, utils_1.default), {
         });
     },
     updateStateData: function (state, originalItem, stateIsTarget, addToState) {
+        if (stateIsTarget === void 0) { stateIsTarget = true; }
+        if (addToState === void 0) { addToState = false; }
         var items = originalItem instanceof Array ? originalItem : [originalItem];
         var updateData = function (_state, _item) {
             var filteredState = _state.filter(function (c) { return c instanceof Object; });
@@ -68,7 +72,7 @@ exports.default = __assign(__assign({}, utils_1.default), {
                     }
                 }
                 else if (addToState) {
-                    this.addToStateData(state, _item, stateIsTarget);
+                    utils.addToStateData(state, _item, stateIsTarget);
                 }
             }
         };
@@ -82,6 +86,7 @@ exports.default = __assign(__assign({}, utils_1.default), {
         });
     },
     removeFromStateData: function (state, originalItem, stateIsTarget) {
+        if (stateIsTarget === void 0) { stateIsTarget = true; }
         var items = originalItem instanceof Array ? originalItem : [originalItem];
         var removeData = function (_state, _item) {
             var index = _state.findIndex(function (current) {
@@ -111,6 +116,7 @@ exports.default = __assign(__assign({}, utils_1.default), {
         });
     },
     findItemInState: function (state, item, stateIsTarget) {
+        if (stateIsTarget === void 0) { stateIsTarget = true; }
         var itemId = item instanceof Object ? item.id : item;
         if (stateIsTarget === true) {
             return state.findIndex(function (current) { return current instanceof Object && current.id == itemId; });
@@ -120,6 +126,7 @@ exports.default = __assign(__assign({}, utils_1.default), {
         }
     },
     getItemInState: function (state, item, stateIsTarget) {
+        if (stateIsTarget === void 0) { stateIsTarget = true; }
         var itemId = item instanceof Object ? item.id : item;
         if (stateIsTarget === true) {
             return state.find(function (current) { return current.id == itemId; });
@@ -129,3 +136,4 @@ exports.default = __assign(__assign({}, utils_1.default), {
         }
     }
 });
+exports.default = utils;
