@@ -20,11 +20,11 @@ export default {
     addToKey = addToKey || 'filter';
     let result:any = {};
 
-    const flattenObjectLocal = function (object: any, parent: string | number) {
+    const flattenObjectLocal = function (object: any, parent: string | number = '') {
       if (object) {
         for (const k of Object.keys(object)) {
           let fullKey = k;
-          if (parent !== undefined) {
+          if (parent !== undefined && `${parent}`.length > 0) {
             fullKey = parent + '[' + fullKey + ']';
           }
           // fullKey = `[${addToKey}]${fullKey}`;
@@ -50,7 +50,7 @@ export default {
       const objectToFormData = function (object: any, parent: string | number =  '') {
         if (object) {
           if (object instanceof Array) {
-            if (!object.length && parent) {
+            if (!object.length && parent && `${parent}`.length > 0) {
               result[`${parent}[]`] = null;
             } else {
               object.forEach((v, k: any) => {
@@ -72,7 +72,7 @@ export default {
           } else {
             for (const k of Object.keys(object)) {
               let fullKey = k;
-              if (parent !== undefined) {
+              if (parent !== undefined && `${parent}`.length > 0) {
                 fullKey = parent + '[' + fullKey + ']';
               }
               if (

@@ -23,11 +23,12 @@ exports.default = {
         addToKey = addToKey || 'filter';
         var result = {};
         var flattenObjectLocal = function (object, parent) {
+            if (parent === void 0) { parent = ''; }
             if (object) {
                 for (var _i = 0, _a = Object.keys(object); _i < _a.length; _i++) {
                     var k = _a[_i];
                     var fullKey = k;
-                    if (parent !== undefined) {
+                    if (parent !== undefined && ("" + parent).length > 0) {
                         fullKey = parent + '[' + fullKey + ']';
                     }
                     // fullKey = `[${addToKey}]${fullKey}`;
@@ -57,7 +58,7 @@ exports.default = {
                 if (parent === void 0) { parent = ''; }
                 if (object) {
                     if (object instanceof Array) {
-                        if (!object.length && parent) {
+                        if (!object.length && parent && ("" + parent).length > 0) {
                             result_1[parent + "[]"] = null;
                         }
                         else {
@@ -83,7 +84,7 @@ exports.default = {
                         for (var _i = 0, _a = Object.keys(object); _i < _a.length; _i++) {
                             var k = _a[_i];
                             var fullKey = k;
-                            if (parent !== undefined) {
+                            if (parent !== undefined && ("" + parent).length > 0) {
                                 fullKey = parent + '[' + fullKey + ']';
                             }
                             if (object[k] instanceof File ||
