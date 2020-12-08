@@ -53,7 +53,7 @@
 		"js-logger": "^1.6.0"
 	},
 	"gitHooks": {
-		"pre-commit": "npm run lint && git add ."
+		"pre-commit": "npm run lint && npm run build && git add ."
 	},
 	"lint-staged": {
 		"*.{js,jsx,vue,ts,tsx}": [
