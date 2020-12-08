@@ -55,7 +55,7 @@ export default {
             } else {
               object.forEach((v, k: any) => {
                 let fullKey = k;
-                if (parent !== undefined) {
+                if (parent !== undefined && `${parent}`.length > 0) {
                   fullKey = parent + '[' + fullKey + ']';
                 }
                 if (

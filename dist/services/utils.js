@@ -63,7 +63,7 @@ exports.default = {
                         else {
                             object.forEach(function (v, k) {
                                 var fullKey = k;
-                                if (parent !== undefined) {
+                                if (parent !== undefined && ("" + parent).length > 0) {
                                     fullKey = parent + '[' + fullKey + ']';
                                 }
                                 if (object[k] instanceof File ||
