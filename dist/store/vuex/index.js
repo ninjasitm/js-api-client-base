@@ -578,14 +578,14 @@ var Store = /** @class */ (function (_super) {
             },
             _a[_TYPES.STORE_CREATE_CACHE_UPDATE] = function (state, data, type) {
                 state.cachedCreateStore = Object.assign(state.cachedCreateStore || {}, data);
-                var realWindow = window || null;
+                var realWindow = typeof window !== 'undefined' ? window : null;
                 if (realWindow && realWindow instanceof Object) {
                     realWindow.localStorage.setItem("cachedCreate" + type, JSON.stringify(state.cachedCreateStore));
                 }
             },
             _a[_TYPES.STORE_CREATE_CACHE_REMOVE] = function (state, type) {
                 state.cachedCreateStore = null;
-                var realWindow = window || null;
+                var realWindow = typeof window !== 'undefined' ? window : null;
                 if (realWindow && realWindow instanceof Object) {
                     realWindow.localStorage.removeItem("cachedCreate" + type);
                 }

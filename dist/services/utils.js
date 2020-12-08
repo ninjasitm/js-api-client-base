@@ -54,7 +54,7 @@ exports.default = {
             var result_1 = {};
             var formData = new FormData();
             var objectToFormData_1 = function (object, parent) {
-                if (parent === void 0) { parent = -1; }
+                if (parent === void 0) { parent = ''; }
                 if (object) {
                     if (object instanceof Array) {
                         if (!object.length && parent) {

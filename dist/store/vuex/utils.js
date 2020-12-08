@@ -22,7 +22,9 @@ var utils = __assign(__assign({}, utils_1.default), {
         var addData = function (_state, _item) {
             if (_state instanceof Array) {
                 var filteredState = _state.filter(function (c) { return c instanceof Object; });
-                var index = filteredState.findIndex(function (current) { return current instanceof Object && current.id === _item.id; });
+                var index = filteredState.findIndex(function (current) {
+                    return current instanceof Object && current.id === _item.id;
+                });
                 if (index > -1) {
                     var existing = filteredState.find(function (current) { return current instanceof Object && current.id === _item.id; });
                     if (existing instanceof Object) {
@@ -57,18 +59,16 @@ var utils = __assign(__assign({}, utils_1.default), {
         if (addToState === void 0) { addToState = false; }
         var items = originalItem instanceof Array ? originalItem : [originalItem];
         var updateData = function (_state, _item) {
-            var filteredState = _state.filter(function (c) { return c instanceof Object; });
-            var index = filteredState.findIndex(function (current) { return current instanceof Object && current.id === _item.id; });
             if (_state instanceof Array) {
-                var filteredState_1 = _state.filter(function (c) { return c instanceof Object; });
-                var index_1 = filteredState_1.findIndex(function (current) { return current instanceof Object && current.id === _item.id; });
-                if (index_1 > -1) {
-                    var existing = filteredState_1.find(function (current) { return current instanceof Object && current.id === _item.id; });
+                var filteredState = _state.filter(function (c) { return c instanceof Object; });
+                var index = filteredState.findIndex(function (current) { return current instanceof Object && current.id === _item.id; });
+                if (index > -1) {
+                    var existing = filteredState.find(function (current) { return current instanceof Object && current.id === _item.id; });
                     if (existing instanceof Object) {
-                        _state.splice(index_1, 1, __assign(__assign({}, existing), _item));
+                        _state.splice(index, 1, __assign(__assign({}, existing), _item));
                     }
                     else {
-                        _state.splice(index_1, 1, _item);
+                        _state.splice(index, 1, _item);
                     }
                 }
                 else if (addToState) {
@@ -89,19 +89,21 @@ var utils = __assign(__assign({}, utils_1.default), {
         if (stateIsTarget === void 0) { stateIsTarget = true; }
         var items = originalItem instanceof Array ? originalItem : [originalItem];
         var removeData = function (_state, _item) {
-            var index = _state.findIndex(function (current) {
-                if (current instanceof Object) {
-                    return current.id === _item;
+            if (_state instanceof Array) {
+                var index = _state.findIndex(function (current) {
+                    if (current instanceof Object) {
+                        return current.id === _item;
+                    }
+                    else if (_item instanceof Function) {
+                        return _item(current);
+                    }
+                    else {
+                        return current === _item;
+                    }
+                });
+                if (index > -1) {
+                    _state.splice(index, 1);
                 }
-                else if (_item instanceof Function) {
-                    return _item(current);
-                }
-                else {
-                    return current === _item;
-                }
-            });
-            if (index > -1) {
-                _state.splice(index, 1);
             }
         };
         items.forEach(function (item) {
@@ -134,6 +136,6 @@ var utils = __assign(__assign({}, utils_1.default), {
         else {
             return state.data.data.find(function (current) { return current instanceof Object && current.id == itemId; });
         }
-    }
+    },
 });
 exports.default = utils;

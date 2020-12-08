@@ -47,7 +47,7 @@ export default {
     } else {
       const result: any = {};
       const formData = new FormData();
-      const objectToFormData = function (object: any, parent: string | number =  -1) {
+      const objectToFormData = function (object: any, parent: string | number =  '') {
         if (object) {
           if (object instanceof Array) {
             if (!object.length && parent) {
