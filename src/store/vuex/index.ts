@@ -345,7 +345,7 @@ class Store extends BaseStore implements IStore {
                 .save(params)
                 .then((response: any) => {
                   log.info(`[Store: ${type}]: Saved ${type}`, response);
-                  const data = response.data.data;
+                  const data = response.data;
                   context.commit(coreTypes.STORE_SAVE, {
                     type,
                     context,
