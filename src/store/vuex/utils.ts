@@ -5,7 +5,7 @@ const utils: any = {
 		addToStateData(
 			state: Array<any> | any,
 			originalItem: any,
-			stateIsTarget: boolean = true,
+			stateIsTarget: boolean = false,
 			push: boolean = false
 		) {
 			const addData = function (_state: Array<any> | any, _item: any) {
@@ -51,7 +51,7 @@ const utils: any = {
 		updateStateData(
 			state: Array<any> | any,
 			originalItem: any,
-			stateIsTarget: boolean = true,
+			stateIsTarget: boolean = false,
 			addToState: boolean = false
 		) {
 			const items =
@@ -92,7 +92,7 @@ const utils: any = {
 		removeFromStateData(
 			state: Array<any> | any,
 			originalItem: any,
-			stateIsTarget: boolean = true
+			stateIsTarget: boolean = false
 		) {
 			const items =
 				originalItem instanceof Array ? originalItem : [originalItem];
@@ -125,7 +125,7 @@ const utils: any = {
 		findItemInState(
 			state: Array<any> | any,
 			item: any,
-			stateIsTarget: boolean = true
+			stateIsTarget: boolean = false
 		) {
 			const itemId = item instanceof Object ? item.id : item;
 			if (stateIsTarget === true) {
@@ -141,7 +141,7 @@ const utils: any = {
 		getItemInState(
 			state: Array<any> | any,
 			item: any,
-			stateIsTarget: boolean = true
+			stateIsTarget: boolean = false
 		) {
 			const itemId = item instanceof Object ? item.id : item;
 			if (stateIsTarget === true) {
