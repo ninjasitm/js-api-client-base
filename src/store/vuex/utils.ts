@@ -44,7 +44,7 @@ const utils: any = {
 				} else {
 					addData(state.data.data, item);
 					state.all.push(item);
-					state.data.total = state.data.data.length;
+					state.data.total = state.data.data instanceof Array ? state.data.data.length : state.all.length;
 				}
 			});
 		},
@@ -118,7 +118,7 @@ const utils: any = {
 					removeData(state, id);
 				} else {
 					removeData(state.data.data, id);
-					state.data.total = state.data.data.length;
+					state.data.total = state.data.data instanceof Array ? state.data.data.length : state.all.length;
 				}
 			});
 		},
