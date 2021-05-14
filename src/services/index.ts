@@ -160,10 +160,10 @@ class BaseApi implements IApi {
 				const path =
 					instance.getUrl(propKey) +
 					"/"
-					.substring(method.length)
-					.replace(/([a-z])([A-Z])/g, "$1/$2")
-					.replace(/\$/g, "/$/")
-					.toLowerCase();
+						.substring(method.length)
+						.replace(/([a-z])([A-Z])/g, "$1/$2")
+						.replace(/\$/g, "/$/")
+						.toLowerCase();
 				return (...args: any[]) => {
 					const finalPath = path.replace(/\$/g, () => args.shift());
 					const body = args.shift() || {};
@@ -220,7 +220,7 @@ class BaseApi implements IApi {
 	 * @param {Object} options
 	 * @memberof BaseApi
 	 */
-	getIndexConfig(params:any, options: any) {
+	getIndexConfig(params: any, options: any) {
 		const id = params instanceof Object ? params.id : params;
 		this.log().info(`[Services: ${this.type}]: GetIndexConfig`);
 		const {
@@ -235,7 +235,7 @@ class BaseApi implements IApi {
 					params
 				)}${id ? "/" + id : ""}`
 			)
-			.catch((error: any) =>  {
+			.catch((error: any) => {
 				this.log().warn(`[Services: ${this.type}: GetIndexConfig]:`, error);
 				throw this.utils.resolveError(error);
 			});
@@ -248,7 +248,7 @@ class BaseApi implements IApi {
 	 * @param {Object} options
 	 * @memberof BaseApi
 	 */
-	getFormConfig(params:any, options: any) {
+	getFormConfig(params: any, options: any) {
 		const id = params instanceof Object ? params.id : params;
 		this.log().info(`[Services: ${this.type}]: GetFormConfig`);
 		const {
@@ -264,7 +264,7 @@ class BaseApi implements IApi {
 					params
 				)}${idPart}`
 			)
-			.catch((error: any) =>  {
+			.catch((error: any) => {
 				this.log().warn(`[Services: ${this.type}: GetFormConfig]:`, error);
 				throw this.utils.resolveError(error);
 			});
@@ -278,7 +278,7 @@ class BaseApi implements IApi {
 	 * @returns {Promise}
 	 * @memberof BaseApi
 	 */
-	getAll(params:any, options: any) {
+	getAll(params: any, options: any) {
 		this.log().info(`[Services: ${this.type}]: Get All ${this.type}`, params);
 		const {
 			getter,
@@ -288,7 +288,7 @@ class BaseApi implements IApi {
 			.get(this.getUrl(getter || "getAll", endPoint || null, params), {
 				params: params
 			})
-			.catch((error: any) =>  {
+			.catch((error: any) => {
 				this.log().warn(
 					`[Services: ${this.type}: Get All ${this.type}]:`,
 					error
@@ -305,7 +305,7 @@ class BaseApi implements IApi {
 	 * @returns {Promise}
 	 * @memberof BaseApi
 	 */
-	getOne(params:any, options: any) {
+	getOne(params: any, options: any) {
 		const id = params instanceof Object ? params.id : params;
 		this.log().info(`[Services: ${this.type}]: Get ${this.type}`, id);
 		const {
@@ -315,10 +315,10 @@ class BaseApi implements IApi {
 		return this.api()
 			.get(
 				this.getUrl(getter || "getOne", endPoint || null, params) + "/" + id, {
-					params
-				}
+				params
+			}
 			)
-			.catch((error: any) =>  {
+			.catch((error: any) => {
 				this.log().warn(
 					`[Services: ${this.type}: Get ${this.type}]: Error`,
 					error
@@ -335,7 +335,7 @@ class BaseApi implements IApi {
 	 * @returns {Promise}
 	 * @memberof BaseApi
 	 */
-	save(params:any, options: any) {
+	save(params: any, options: any) {
 		const id = params.id;
 		const data = this.utils.createFormData(params);
 		this.log().info(
@@ -351,14 +351,14 @@ class BaseApi implements IApi {
 		} = options || {};
 		const idPart = id ? "/" + id : "";
 		return this.api()[method](
-				`${this.getUrl(
-					getter || "save",
-					endPoint || null,
-					params.data || params
-				)}${idPart}`,
-				data
-			)
-			.catch((error: any) =>  {
+			`${this.getUrl(
+				getter || "save",
+				endPoint || null,
+				params.data || params
+			)}${idPart}`,
+			data
+		)
+			.catch((error: any) => {
 				this.log().warn(
 					`[Services: ${this.type}: Save ${this.type}]: Error`,
 					error.response
@@ -375,7 +375,7 @@ class BaseApi implements IApi {
 	 * @returns {Promise}
 	 * @memberof BaseApi
 	 */
-	import(params:any, options: any) {
+	import(params: any, options: any) {
 		const data = this.utils.createFormData(params);
 		this.log().info(`[Services: ${this.type}]: Import ${this.type}`, data);
 		const {
@@ -384,7 +384,7 @@ class BaseApi implements IApi {
 		} = options || {};
 		return this.api()
 			.post(this.getUrl(getter || "import", endPoint || "import", params), data)
-			.catch((error: any) =>  {
+			.catch((error: any) => {
 				this.log().warn(`[Services: ${this.type}: Import]: Error`, error);
 				throw this.utils.resolveError(error);
 			});
@@ -398,7 +398,7 @@ class BaseApi implements IApi {
 	 * @returns {Promise}
 	 * @memberof BaseApi
 	 */
-	export (params:any, options: any) {
+	export(params: any, options: any) {
 		const data = this.utils.createFormData(params);
 		this.log().info(`[Services: ${this.type}]: Export ${this.type}`, data);
 		const {
@@ -407,7 +407,7 @@ class BaseApi implements IApi {
 		} = options || {};
 		return this.api()
 			.post(this.getUrl(getter || "export", endPoint || "export", params), data)
-			.catch((error: any) =>  {
+			.catch((error: any) => {
 				this.log().warn(`[Services: ${this.type}: Export]: Error`, error);
 				throw this.utils.resolveError(error);
 			});
@@ -421,7 +421,7 @@ class BaseApi implements IApi {
 	 * @returns {Promise}
 	 * @memberof BaseApi
 	 */
-	delete(params:any, options: any) {
+	delete(params: any, options: any) {
 		const id = params.id || params;
 		const urlParams = params.params || {};
 		const bodyParams = params.body || {};
@@ -434,12 +434,12 @@ class BaseApi implements IApi {
 		return this.api()
 			.delete(
 				this.getUrl(getter || "delete", endPoint || null, params) + "/" + id, {
-					params: urlParams,
-					body: bodyParams,
-					data: dataParams
-				}
+				params: urlParams,
+				body: bodyParams,
+				data: dataParams
+			}
 			)
-			.catch((error: any) =>  {
+			.catch((error: any) => {
 				this.log().warn(
 					`[Services: ${this.type}: Delete ${this.type}]: Error`,
 					error
@@ -456,7 +456,7 @@ class BaseApi implements IApi {
 	 * @returns {Promise}
 	 * @memberof BaseApi
 	 */
-	toggle(params:any, options: any) {
+	toggle(params: any, options: any) {
 		const id = params.id || params;
 		this.log().info(`[Services: ${this.type}]: Toggle ${this.type}`, id);
 		const {
@@ -467,9 +467,37 @@ class BaseApi implements IApi {
 			.put(
 				this.getUrl(getter || "toggle", endPoint || "toggle", params) + "/" + id
 			)
-			.catch((error: any) =>  {
+			.catch((error: any) => {
 				this.log().warn(
 					`[Services: ${this.type}: Toggle ${this.type}]: Error`,
+					error
+				);
+				throw this.utils.resolveError(error);
+			});
+	}
+
+	/**
+	 * Duplicate an item
+	 *
+	 * @param {any} params
+	 * @param {Object} options
+	 * @returns {Promise}
+	 * @memberof BaseApi
+	 */
+	duplicate(params: any, options: any) {
+		this.log().info(`[Services: ${this.type}]: Duplicate ${this.type}`, params);
+		const {
+			getter,
+			endPoint
+		} = options || {};
+		return this.api()
+			.post(
+				this.getUrl(getter || "duplicate", endPoint || "duplicate", params),
+				params
+			)
+			.catch((error: any) => {
+				this.log().warn(
+					`[Services: ${this.type}: Duplicate ${this.type}]: Error`,
 					error
 				);
 				throw this.utils.resolveError(error);

@@ -13,6 +13,7 @@ const coreTypes = {
   STORE_GET_ALL: `STORE_GET_ALL`,
   STORE_SET_ALL: `STORE_SET_ALL`,
   STORE_SAVE: `STORE_SAVE`,
+  STORE_DUPLICATE: `STORE_DUPLICATE`,
   STORE_CREATE: `STORE_CREATE`,
   STORE_UPDATE: `STORE_UPDATE`,
   STORE_IMPORT: `STORE_IMPORT`,
@@ -361,6 +362,34 @@ class Store extends BaseStore implements IStore {
               });
             },
             /**
+             * Duplicate the given data to the store
+             * @param {Object} context
+             * @param {Object} params
+             * @returns {Promise}
+             */
+            duplicate(context: any, params: any) {
+              log.info(`[Store: ${type}]: Duplicate ${type}`, params);
+              return new Promise((resolve, reject) => {
+                return api
+                  .duplicate(params)
+                  .then((response: any) => {
+                    log.info(`[Store: ${type}]: Duplicated ${type}`, response);
+                    const data = response.data;
+                    context.commit(coreTypes.STORE_DUPLICATE, {
+                      type,
+                      context,
+                      params,
+                      result: data,
+                    });
+                    resolve(data);
+                  })
+                  .catch((error: any) => {
+                    log.info(`[Store: ${type}]: Error Duplicating ${type}`, error);
+                    reject(error);
+                  });
+              });
+            },
+            /**
              * Import the given data into the store
              * @param {Object} context
              * @param {Object} params
@@ -524,6 +553,11 @@ class Store extends BaseStore implements IStore {
           return data;
         },
         [_TYPES.STORE_SAVE](state: any, data: any) {
+          // Only update if this is a new item
+          utils.addToStateData(state, data.result.data || data.result);
+          return data;
+        },
+        [_TYPES.STORE_DUPLICATE](state: any, data: any) {
           // Only update if this is a new item
           utils.addToStateData(state, data.result.data || data.result);
           return data;
