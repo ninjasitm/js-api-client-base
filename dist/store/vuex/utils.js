@@ -17,7 +17,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var utils_1 = __importDefault(require("../../services/utils"));
 var utils = __assign(__assign({}, utils_1.default), {
     addToStateData: function (state, originalItem, stateIsTarget, push) {
-        if (stateIsTarget === void 0) { stateIsTarget = true; }
+        if (stateIsTarget === void 0) { stateIsTarget = false; }
         if (push === void 0) { push = false; }
         var addData = function (_state, _item) {
             if (_state instanceof Array) {
@@ -50,12 +50,12 @@ var utils = __assign(__assign({}, utils_1.default), {
             else {
                 addData(state.data.data, item);
                 state.all.push(item);
-                state.data.total = state.data.data.length;
+                state.data.total = state.data.data instanceof Array ? state.data.data.length : state.all.length;
             }
         });
     },
     updateStateData: function (state, originalItem, stateIsTarget, addToState) {
-        if (stateIsTarget === void 0) { stateIsTarget = true; }
+        if (stateIsTarget === void 0) { stateIsTarget = false; }
         if (addToState === void 0) { addToState = false; }
         var items = originalItem instanceof Array ? originalItem : [originalItem];
         var updateData = function (_state, _item) {
@@ -86,7 +86,7 @@ var utils = __assign(__assign({}, utils_1.default), {
         });
     },
     removeFromStateData: function (state, originalItem, stateIsTarget) {
-        if (stateIsTarget === void 0) { stateIsTarget = true; }
+        if (stateIsTarget === void 0) { stateIsTarget = false; }
         var items = originalItem instanceof Array ? originalItem : [originalItem];
         var removeData = function (_state, _item) {
             if (_state instanceof Array) {
@@ -113,12 +113,12 @@ var utils = __assign(__assign({}, utils_1.default), {
             }
             else {
                 removeData(state.data.data, id);
-                state.data.total = state.data.data.length;
+                state.data.total = state.data.data instanceof Array ? state.data.data.length : state.all.length;
             }
         });
     },
     findItemInState: function (state, item, stateIsTarget) {
-        if (stateIsTarget === void 0) { stateIsTarget = true; }
+        if (stateIsTarget === void 0) { stateIsTarget = false; }
         var itemId = item instanceof Object ? item.id : item;
         if (stateIsTarget === true) {
             return state.findIndex(function (current) { return current instanceof Object && current.id == itemId; });
@@ -128,7 +128,7 @@ var utils = __assign(__assign({}, utils_1.default), {
         }
     },
     getItemInState: function (state, item, stateIsTarget) {
-        if (stateIsTarget === void 0) { stateIsTarget = true; }
+        if (stateIsTarget === void 0) { stateIsTarget = false; }
         var itemId = item instanceof Object ? item.id : item;
         if (stateIsTarget === true) {
             return state.find(function (current) { return current.id == itemId; });

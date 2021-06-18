@@ -181,5 +181,14 @@ declare class BaseApi implements IApi {
      * @memberof BaseApi
      */
     toggle(params: any, options: any): any;
+    /**
+     * Duplicate an item
+     *
+     * @param {any} params
+     * @param {Object} options
+     * @returns {Promise}
+     * @memberof BaseApi
+     */
+    duplicate(params: any, options: any): any;
 }
 export default BaseApi;

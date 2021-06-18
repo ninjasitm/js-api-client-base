@@ -406,6 +406,25 @@ var BaseApi = /** @class */ (function () {
             throw _this.utils.resolveError(error);
         });
     };
+    /**
+     * Duplicate an item
+     *
+     * @param {any} params
+     * @param {Object} options
+     * @returns {Promise}
+     * @memberof BaseApi
+     */
+    BaseApi.prototype.duplicate = function (params, options) {
+        var _this = this;
+        this.log().info("[Services: " + this.type + "]: Duplicate " + this.type, params);
+        var _a = options || {}, getter = _a.getter, endPoint = _a.endPoint;
+        return this.api()
+            .post(this.getUrl(getter || "duplicate", endPoint || "duplicate", params), params)
+            .catch(function (error) {
+            _this.log().warn("[Services: " + _this.type + ": Duplicate " + _this.type + "]: Error", error);
+            throw _this.utils.resolveError(error);
+        });
+    };
     return BaseApi;
 }());
 exports.default = BaseApi;

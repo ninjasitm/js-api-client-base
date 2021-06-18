@@ -19,13 +19,6 @@ declare class Store extends BaseStore implements IStore {
      */
     state(state: object, exclusive?: boolean): {
         constructor: Function;
-        /**
-         * Get the index page config for the given type
-         * @param {Object} context
-         * @param {Object} params
-         * @param {boolean} force
-         * @returns {Promise}
-         */
         toString(): string;
         toLocaleString(): string;
         valueOf(): Object;
@@ -41,13 +34,6 @@ declare class Store extends BaseStore implements IStore {
         exported?: undefined;
     } | {
         constructor: Function;
-        /**
-         * Get the index page config for the given type
-         * @param {Object} context
-         * @param {Object} params
-         * @param {boolean} force
-         * @returns {Promise}
-         */
         toString(): string;
         toLocaleString(): string;
         valueOf(): Object;
@@ -81,13 +67,6 @@ declare class Store extends BaseStore implements IStore {
      */
     getters(getters: object, exclusive?: boolean): {
         constructor: Function;
-        /**
-         * Get the index page config for the given type
-         * @param {Object} context
-         * @param {Object} params
-         * @param {boolean} force
-         * @returns {Promise}
-         */
         toString(): string;
         toLocaleString(): string;
         valueOf(): Object;
@@ -103,13 +82,6 @@ declare class Store extends BaseStore implements IStore {
         log(): any;
     } | {
         constructor: Function;
-        /**
-         * Get the index page config for the given type
-         * @param {Object} context
-         * @param {Object} params
-         * @param {boolean} force
-         * @returns {Promise}
-         */
         toString(): string;
         toLocaleString(): string;
         valueOf(): Object;
@@ -135,13 +107,6 @@ declare class Store extends BaseStore implements IStore {
      */
     actions(actions: object, _type?: string, exclusive?: boolean): {
         constructor: Function;
-        /**
-         * Get the index page config for the given type
-         * @param {Object} context
-         * @param {Object} params
-         * @param {boolean} force
-         * @returns {Promise}
-         */
         toString(): string;
         toLocaleString(): string;
         valueOf(): Object;
