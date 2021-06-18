@@ -75,9 +75,9 @@ class Store extends BaseStore implements IStore {
   state(state: object, exclusive: boolean = false) {
     const extend = state instanceof Object ? state : {};
     const baseState =
-      exclusive === true ?
-        {} :
-        {
+      exclusive === true
+        ? {}
+        : {
           config: {
             index: null,
             form: null,
@@ -112,9 +112,9 @@ class Store extends BaseStore implements IStore {
   getters(getters: object, exclusive: boolean = false) {
     const extend = getters instanceof Object ? getters : {};
     const baseGetters =
-      exclusive === true ?
-        {} :
-        {
+      exclusive === true
+        ? {}
+        : {
           config: (state: any) => state.config,
           indexConfig: (state: any) => state.config.index,
           formConfig: (state: any) => state.config.form,
@@ -146,16 +146,20 @@ class Store extends BaseStore implements IStore {
    * @param {Object} api
    * @returns
    */
-  actions(actions: object, _type: string = 'unknown', exclusive: boolean = false) {
+  actions(
+    actions: object,
+    _type: string = "unknown",
+    exclusive: boolean = false
+  ) {
     const api = this.api();
     const log = this.log();
     let type = _type;
     type = type[0] + type.substr(1);
     const extend = actions instanceof Object ? actions : {};
     const baseActions =
-      exclusive === true ?
-        {} :
-        {
+      exclusive === true
+        ? {}
+        : {
           ...{
             /**
              * Get the index page config for the given type
@@ -164,7 +168,11 @@ class Store extends BaseStore implements IStore {
              * @param {boolean} force
              * @returns {Promise}
              */
-            getIndexConfig(context: any, params: any = {}, force: boolean = false) {
+            getIndexConfig(
+              context: any,
+              params: any = {},
+              force: boolean = false
+            ) {
               const forceGet = force || true;
               return new Promise((resolve, reject) => {
                 if (!context.state.config.index || forceGet) {
@@ -192,7 +200,11 @@ class Store extends BaseStore implements IStore {
              * @param {boolean} force
              * @returns {Promise}
              */
-            getFormConfig(context: any, params: any = {}, force: boolean = false) {
+            getFormConfig(
+              context: any,
+              params: any = {},
+              force: boolean = false
+            ) {
               const forceGet = force || true;
               return new Promise((resolve, reject) => {
                 if (!context.state.config.form || forceGet) {
@@ -284,11 +296,17 @@ class Store extends BaseStore implements IStore {
                   return api
                     .getOne(id)
                     .then((response: any) => {
+                      const result = response.data.hasOwnProperty("meta")
+                        ? {
+                          meta: response.data.meta,
+                          data: response.data.data,
+                        }
+                        : response.data.data;
                       context.commit(coreTypes.STORE_GET, {
                         params: id,
-                        result: response.data.data,
+                        result: result,
                       });
-                      resolve(response.data.data);
+                      resolve(result);
                     })
                     .catch((error: any) => {
                       reject(error);
@@ -373,7 +391,10 @@ class Store extends BaseStore implements IStore {
                 return api
                   .duplicate(params)
                   .then((response: any) => {
-                    log.info(`[Store: ${type}]: Duplicated ${type}`, response);
+                    log.info(
+                      `[Store: ${type}]: Duplicated ${type}`,
+                      response
+                    );
                     const data = response.data;
                     context.commit(coreTypes.STORE_DUPLICATE, {
                       type,
@@ -384,7 +405,10 @@ class Store extends BaseStore implements IStore {
                     resolve(data);
                   })
                   .catch((error: any) => {
-                    log.info(`[Store: ${type}]: Error Duplicating ${type}`, error);
+                    log.info(
+                      `[Store: ${type}]: Error Duplicating ${type}`,
+                      error
+                    );
                     reject(error);
                   });
               });
@@ -481,14 +505,19 @@ class Store extends BaseStore implements IStore {
                   .toggle(params)
                   .then((response: any) => {
                     log.info(`[Store: ${type}]: Toggled ${type}`, response);
-                    const data = response.data.data;
+                    const result = response.data.hasOwnProperty("meta")
+                      ? {
+                        meta: response.data.meta,
+                        data: response.data.data,
+                      }
+                      : response.data.data;
                     context.commit(coreTypes.STORE_SAVE, {
                       type,
                       context,
                       params,
-                      result: data,
+                      result,
                     });
-                    resolve(data);
+                    resolve(result);
                   })
                   .catch((error: any) => {
                     log.info(
@@ -610,12 +639,16 @@ class Store extends BaseStore implements IStore {
         [_TYPES.STORE_CREATE_CACHE_GET](state: any, options: any) {
           return state.cachedCreateStore;
         },
-        [_TYPES.STORE_CREATE_CACHE_UPDATE](state: any, data: any, type: string) {
+        [_TYPES.STORE_CREATE_CACHE_UPDATE](
+          state: any,
+          data: any,
+          type: string
+        ) {
           state.cachedCreateStore = Object.assign(
             state.cachedCreateStore || {},
             data
           );
-          let realWindow: any = typeof window !== 'undefined' ? window : null;
+          let realWindow: any = typeof window !== "undefined" ? window : null;
           if (realWindow && realWindow instanceof Object) {
             realWindow.localStorage.setItem(
               `cachedCreate${type}`,
@@ -625,7 +658,7 @@ class Store extends BaseStore implements IStore {
         },
         [_TYPES.STORE_CREATE_CACHE_REMOVE](state: any, type: string) {
           state.cachedCreateStore = null;
-          let realWindow: any = typeof window !== 'undefined' ? window : null;
+          let realWindow: any = typeof window !== "undefined" ? window : null;
           if (realWindow && realWindow instanceof Object) {
             realWindow.localStorage.removeItem(`cachedCreate${type}`);
           }
