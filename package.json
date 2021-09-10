@@ -1,6 +1,6 @@
 {
 	"name": "@nitm/js-api-client-base",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"description": "Javascript API client base. Use this to develop services for react, vue or others using axios",
 	"main": "./dist/index.js",
 	"types": "./dist/types.d.ts",
