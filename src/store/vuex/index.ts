@@ -539,6 +539,9 @@ class Store extends BaseStore implements IStore {
         log() {
           return log;
         },
+        api() {
+          return api;
+        },
       },
       ...baseActions,
       ...extend,
